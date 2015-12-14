@@ -128,20 +128,20 @@ include_directories(
 
 ## Declare a C++ executable
 add_executable(turtlebot_stopper_node src/main_stopper.cpp src/Stopper.cpp)
-#add_executable(turtlebot_aimless_node src/main.cpp src/Stopper.cpp src/Rotator.cpp)
+add_executable(turtlebot_aimless_node src/main.cpp src/Stopper.cpp src/Rotator.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 add_dependencies(turtlebot_stopper_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-#add_dependencies(turtlebot_aimless_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(turtlebot_aimless_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(turtlebot_stopper_node
   ${catkin_LIBRARIES}
 )
-#target_link_libraries(turtlebot_aimless_node
-#  ${catkin_LIBRARIES}
-#)
+target_link_libraries(turtlebot_aimless_node
+  ${catkin_LIBRARIES}
+)
 
 #############
 ## Install ##

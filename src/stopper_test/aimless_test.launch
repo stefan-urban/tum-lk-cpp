@@ -1,0 +1,3 @@
+<launch>
+  <node name="aimless_mover" pkg="stopper_test" type="turtlebot_aimless_node" output="screen" />
+</launch>
