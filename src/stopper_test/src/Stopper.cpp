@@ -15,18 +15,23 @@ Stopper::Stopper()
 void Stopper::scanCallback(const sensor_msgs::LaserScan::ConstPtr& scan)
 {
   // Find the range minimum
-  float overall_angle = scan->angle_max - scan->angle_min;
-  int max_idx = std::ceil(overall_angle / scan->angle_increment);
+  int min_idx = std::ceil((MIN_SCAN_ANGLE_RAD - scan->angle_min) / scan->angle_increment);
+  int max_idx = std::floor((MAX_SCAN_ANGLE_RAD - scan->angle_min) / scan->angle_increment);
 
   closest_range = scan->ranges[0];
 
-  for (int i = 1; i <= max_idx; i++)
+  ROS_INFO_STREAM("min idx: " << min_idx);
+  ROS_INFO_STREAM("max idx: " << max_idx);
+
+  for (int i = min_idx + 1; i <= max_idx; i++)
   {
     if (scan->ranges[i] < closest_range)
     {
       closest_range = scan->ranges[i];
     }
   }
+
+  ROS_INFO_STREAM("closest range: " << closest_range);
 
   if (closest_range < MIN_PROXIMITY_RANGE_M)
   {
