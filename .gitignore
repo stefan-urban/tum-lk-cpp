@@ -3,3 +3,6 @@ devel/
 
 .catkin_workspace
 *.user
+
+# this cmake file will be added by catkin_make automatically
+src/CMakeLists.txt
