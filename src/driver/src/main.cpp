@@ -1,23 +1,54 @@
 #include <ros/ros.h>
-#include <kobuki_msgs/SensorState.h>
+#include <aruco_msgs/MarkerArray.h>
+#include <nav_msgs/Odometry.h>
+#include <tf/transform_broadcaster.h>
+#include <geometry_msgs/Twist.h>
 
-#include "Rotator.h"
-#include "Mover.h"
+std::vector<aruco_msgs::Marker> markers;
 
+ros::Publisher cmd_vel_pub;
 
-bool stop = false;
-
-void sensorsCoreCallback(const kobuki_msgs::SensorStateConstPtr& sensor_state)
+void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array)
 {
-  if (sensor_state->bumper > 0)
+//  static tf::TransformListener listener;
+
+  // Copy markers
+  markers = marker_array->markers;
+
+  for (aruco_msgs::Marker &marker : markers)
   {
-    stop = true;
+    ROS_INFO_STREAM("found id: " << marker.id);
+/*
+    tf::StampedTransform transform;
+
+    try
+    {
+      listener.waitForTransform();
+    }
+*/
+    // Calulate direction
+    geometry_msgs::Twist msg;
+    msg.linear.x = 0.1;
+    msg.angular.z = -1.0 * marker.pose.pose.position.x;
+    cmd_vel_pub.publish(msg);
+
+    ROS_INFO_STREAM("rotation demand: " << msg.angular.z);
   }
 }
 
-bool shouldStop()
+void poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
 {
-  return stop;
+  static tf::TransformBroadcaster broadcaster;
+  tf::Transform transform;
+
+  tf::Quaternion quad;
+  tf::quaternionMsgToTF(odom->pose.pose.orientation, quad);
+
+  // Robot is center of universe
+  transform.setOrigin(tf::Vector3(odom->pose.pose.position.x, odom->pose.pose.position.y, 0.0));
+  transform.setRotation(quad);
+
+  broadcaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "base_link"));
 }
 
 int main(int argc, char** argv)
@@ -30,19 +61,21 @@ int main(int argc, char** argv)
   ros::start();
   ROS_INFO_STREAM("Startup!");
 
+  // Publisher
+  cmd_vel_pub = node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 10);
+
   // Subscribers
-  ros::Subscriber sensors_sub = node.subscribe("/mobile_base/sensors/core", 1, &sensorsCoreCallback);
+  ros::Subscriber markers_sub = node.subscribe("/aruco_marker_publisher/markers", 1, &markersCallback);
+  ros::Subscriber pose_sub = node.subscribe("/odom", 1, &poseCallback);
 
   // Loop stuff
   ros::Rate loop_rate(50.0);
 
-  Rotator rot;
-  Mover mov;
 
   // Loop
   while (ros::ok())
   {
-    mov.moveUntilCondition(&shouldStop);
+
 
     ros::spinOnce();
     loop_rate.sleep();
