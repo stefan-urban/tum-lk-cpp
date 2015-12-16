@@ -6,6 +6,7 @@ project(driver)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -123,7 +124,7 @@ catkin_package(
 # add_dependencies(driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(driver_node src/main.cpp src/Rotator.cpp)
+add_executable(driver_node src/main.cpp src/Rotator.cpp src/Mover.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above

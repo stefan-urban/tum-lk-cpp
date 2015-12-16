@@ -1,13 +1,14 @@
 #include "Rotator.h"
 #include <tf/transform_datatypes.h>
 #include <std_msgs/Float32.h>
+#include <geometry_msgs/Twist.h>
 
 Rotator::Rotator()
 : current_angle(0.0)
 , initialized(false)
 {
   // Publish turtlebot movement commands
-  command_pub = node.advertise<geometry_msgs::Twist>("mobile_base/commands/velocity", 10);
+  command_pub = node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 10);
 
   // Subscribe pose
   pose_sub = node.subscribe("/odom", 1, &Rotator::poseCallback, this);
@@ -36,15 +37,26 @@ void Rotator::rotateAngle(float angle)
 
   resetRotation();
 
+  int debounce = 0;
+
   while (ros::ok())
   {
     geometry_msgs::Twist msg;
 
+    ROS_INFO_STREAM("curr: " << getRotation() << " - goal: " << angle);
+
     // Stop if
     if (getRotation() >= angle)
     {
-      command_pub.publish(msg);
-      break;
+      if (debounce < 5 )
+      {
+        debounce++;
+      }
+      else
+      {
+        command_pub.publish(msg);
+        break;
+      }
     }
     else
     {
@@ -62,9 +74,4 @@ void Rotator::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
 {
   current_angle = tf::getYaw(odom->pose.pose.orientation);
   initialized = true;
-
-  std_msgs::Float32 msg;
-  msg.data = current_angle;
-
-  angle_pub.publish(msg);
 }

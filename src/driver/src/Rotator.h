@@ -6,14 +6,14 @@
  *
  * Usage:
  *  Rotator rot;
- *  rot.startRotation(45.0 / 180 * M_PI); // Rotates turtlebot by 45 degree
+ *  rot.rotateAngle(45.0 / 180.0 * M_PI); // Rotates turtlebot by 45 degree
  *  nop(); // This will be executed when rotation is finished
  *
  */
 class Rotator
 {
 public:
-  const static double ROTATION_SPEED = 1.0;
+  const static double ROTATION_SPEED = 0.5;
 
   /**
    * Resets rotation angle to zero and advertises movement command topic
@@ -22,6 +22,7 @@ public:
 
   /**
    * Rotates turtlebot a specific angle counterclockwise
+   * Not working very well.
    * @param angle: Angle to rotate CCW in rad
    */
   void rotateAngle(float angle);
@@ -40,7 +41,7 @@ public:
 
 private:
   ros::NodeHandle node;
-  ros::Publisher command_pub, angle_pub;
+  ros::Publisher command_pub;
   ros::Subscriber pose_sub;
 
   float current_angle, initial_angle;

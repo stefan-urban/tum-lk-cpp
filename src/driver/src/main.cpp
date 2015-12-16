@@ -1,6 +1,24 @@
 #include <ros/ros.h>
+#include <kobuki_msgs/SensorState.h>
 
 #include "Rotator.h"
+#include "Mover.h"
+
+
+bool stop = false;
+
+void sensorsCoreCallback(const kobuki_msgs::SensorStateConstPtr& sensor_state)
+{
+  if (sensor_state->bumper > 0)
+  {
+    stop = true;
+  }
+}
+
+bool shouldStop()
+{
+  return stop;
+}
 
 int main(int argc, char** argv)
 {
@@ -12,16 +30,19 @@ int main(int argc, char** argv)
   ros::start();
   ROS_INFO_STREAM("Startup!");
 
-  ros::Rate loop_rate(10.0);
+  // Subscribers
+  ros::Subscriber sensors_sub = node.subscribe("/mobile_base/sensors/core", 1, &sensorsCoreCallback);
+
+  // Loop stuff
+  ros::Rate loop_rate(50.0);
 
   Rotator rot;
+  Mover mov;
 
   // Loop
   while (ros::ok())
   {
-    // Rotate until ArUco code is detected
-//    rot.rotateUnilCondition(void *function_handle);
-    rot.rotateAngle(10);
+    mov.moveUntilCondition(&shouldStop);
 
     ros::spinOnce();
     loop_rate.sleep();

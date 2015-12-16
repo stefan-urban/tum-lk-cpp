@@ -8,6 +8,8 @@ void sensorsCoreCallback(const kobuki_msgs::SensorStateConstPtr& sensor_state)
 {
   if (sensor_state->bumper > 0)
   {
+    ROS_INFO_STREAM("STOP");
+
     stop = true;
   }
 }
@@ -23,7 +25,7 @@ int main(int argc, char** argv)
   ROS_INFO_STREAM("Startup!");
 
   // Subscribe to sensors
-  ros::Subsriber sub = node.subscribe("/mobile_base/sensors/core", 1, &sensorsCoreCallback);
+  ros::Subscriber sub = node.subscribe("/mobile_base/sensors/core", 1, &sensorsCoreCallback);
 
   ros::Rate loop_rate(50.0);
 
