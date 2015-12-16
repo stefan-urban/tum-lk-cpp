@@ -1,3 +1,0 @@
-<launch>
-  <node name="stopper" pkg="stopper_test" type="turtlebot_stopper_node" output="screen" />
-</launch>

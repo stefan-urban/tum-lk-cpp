@@ -8,7 +8,6 @@ Rotator::Rotator()
 {
   // Publish turtlebot movement commands
   command_pub = node.advertise<geometry_msgs::Twist>("mobile_base/commands/velocity", 10);
-  angle_pub = node.advertise<std_msgs::Float32>("/angle", 10);
 
   // Subscribe pose
   pose_sub = node.subscribe("/odom", 1, &Rotator::poseCallback, this);
@@ -24,7 +23,7 @@ float Rotator::getRotation()
   return std::abs(current_angle - initial_angle);
 }
 
-void Rotator::startRotation(float angle)
+void Rotator::rotateAngle(float angle)
 {
   ros::Rate loop_rate(10.0);
 

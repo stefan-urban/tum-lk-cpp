@@ -1,20 +1,25 @@
 #include <ros/ros.h>
 
-#include "Stopper.h"
-
 int main(int argc, char** argv)
 {
   // Init
-  ros::init(argc, argv, "turtlebot_stopper_node");
+  ros::init(argc, argv, "aruco_code_detection_node");
   ros::NodeHandle node;
 
   // Start ROS
   ros::start();
   ROS_INFO_STREAM("Startup!");
 
-  // Start stopper
-  Stopper stopper;
-  stopper.startMoving();
+  ros::Rate loop_rate(50.0);
+
+  // Loop
+  while (ros::ok())
+  {
+
+
+    ros::spinOnce();
+    loop_rate.sleep();
+  }
 
   // Good bye
   ros::shutdown();

@@ -1,16 +1,20 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(stopper_test)
+project(aruco_code_detection)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  cv_bridge
   roscpp
   std_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+
+find_package(OpenCV)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -49,6 +53,11 @@ find_package(catkin REQUIRED COMPONENTS
 #   Message2.msg
 # )
 
+add_message_files (
+  FILES
+  DetectedCode.msg
+)
+
 ## Generate services in the 'srv' folder
 # add_service_files(
 #   FILES
@@ -66,7 +75,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs
+#   std_msgs  # Or other packages containing msgs
 # )
 
 ################################################
@@ -100,9 +109,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES turtlebot_stopper
-#  CATKIN_DEPENDS roscpp std_msgs
+#  LIBRARIES aruco_code_detection
+#  CATKIN_DEPENDS cv_bridge2 roscpp
 #  DEPENDS system_lib
+  DEPENDS message_runtime
 )
 
 ###########
@@ -117,31 +127,26 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(turtlebot_stopper
-#   src/${PROJECT_NAME}/turtlebot_stopper.cpp
+# add_library(aruco_code_detection
+#   src/${PROJECT_NAME}/aruco_code_detection.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(turtlebot_stopper ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(aruco_code_detection ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-add_executable(turtlebot_stopper_node src/main_stopper.cpp src/Stopper.cpp)
-add_executable(turtlebot_aimless_node src/main.cpp src/Stopper.cpp src/Rotator.cpp)
+# add_executable(aruco_code_detection_node src/aruco_code_detection_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-add_dependencies(turtlebot_stopper_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(turtlebot_aimless_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(aruco_code_detection_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(turtlebot_stopper_node
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(turtlebot_aimless_node
-  ${catkin_LIBRARIES}
-)
+# target_link_libraries(aruco_code_detection_node
+#   ${catkin_LIBRARIES}
+# )
 
 #############
 ## Install ##
@@ -158,7 +163,7 @@ target_link_libraries(turtlebot_aimless_node
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS turtlebot_stopper turtlebot_stopper_node
+# install(TARGETS aruco_code_detection aruco_code_detection_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -183,7 +188,7 @@ target_link_libraries(turtlebot_aimless_node
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_turtlebot_stopper.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_aruco_code_detection.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
