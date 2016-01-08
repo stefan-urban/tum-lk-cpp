@@ -1,3 +1,4 @@
 Header header
-geometry_msgs/Point position
+geometry_msgs/Twist pose
 float32 diameter
+float32 velocity
