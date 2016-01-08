@@ -2,7 +2,7 @@
 <package>
   <name>driver</name>
   <version>1.0.0</version>
-  <description>Drives the robot to a goal given by aruco_code_detection node.</description>
+  <description>Drives the TurtleBot consecutively to locations marked by AruCo codes.</description>
 
   <maintainer email="stefan.urban@tum.de">Stefan Urban</maintainer>
 
