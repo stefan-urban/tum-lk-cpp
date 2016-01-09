@@ -11,6 +11,15 @@
 #include <string>
 
 
+/// Indicates the state of a TurtleBot.
+enum class TurtleBotState
+{
+  IDLE, ///< no movement
+  RANDOM_WALK, ///< searching for the specified marker while avoiding obstacles
+  MOVING_TO_LOCATION, ///< moving to the given location
+  BUMPERHIT_BACK_OFF, ///< executed when a bumper sensor signals a hit
+};
+
 /**
  * Abstraction of the robots position and movement
  */
@@ -49,6 +58,41 @@ public:
    */
   geometry_msgs::Vector3 getPosition();
 
+  /**
+   * Returns the current state of the robot
+   */
+  TurtleBotState getState();
+
+  /**
+   * Sets the state of the robot
+   * @param new_state: Specifies the new state for the robot.
+   */
+  void setState(TurtleBotState new_state);
+
+  /**
+   * @todo: Maybe move the FSM and all the logic for finding AruCo markers
+   *        (ie searchMarker) to the main function? If not, we need to check the
+   *        camera feed when a marker has been found and tell the robot about it
+   */
+
+  /**
+   * Initiates the search for the AruCo marker with the given number
+   * @param marker_number: The ID of the AruCo marker the robot will search for
+   *                       by driving around (random walk) while avoiding
+   *                       obstacles.
+   */ 
+  void searchMarker(int marker_number);
+
+  /**
+   * Executes one step of the finite state machine of the robot. Call this
+   * repeatedly.
+   * If the state is not modified by a call to setState, after completion all
+   * movement related states except BUMPERHIT_BACK_OFF will transition to the
+   * state IDLE. BUMPERHIT_BACK_OFF will continue with the last state that was
+   * active before the hit occurred.
+   */
+  void tick();
+
 private:
   // ...
   ros::NodeHandle node;
@@ -76,6 +120,17 @@ private:
 
   // ...
   tf::TransformBroadcaster tf_broadcaster;
+
+  /**
+   * Current state of the robot
+   */
+  TurtleBotState current_state;
+
+  /*
+   * The last state after the recent state transition.
+   * This is used to resume the last state before BUMPERHIT_BACK_OFF.
+   */
+  TurtleBotState last_state;
 };
 
 #endif /* __TURTLEBOT_H */

@@ -1,6 +1,8 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Point.h>
 
+#include "TurtleBot.h"
+
 int main(int argc, char** argv)
 {
   // Init
@@ -10,6 +12,8 @@ int main(int argc, char** argv)
   // Start ROS
   ros::start();
   ROS_INFO_STREAM("Startup!");
+
+  TurtleBot robot;
 
   // Go from AruCo code #0 to #7
   for (int code_id = 0; code_id <= 7; code_id++)
@@ -23,6 +27,8 @@ int main(int argc, char** argv)
         // If yes, go to next waypoint
 
         // If not, perform random walk
+
+      robot.tick();
 
       ros::spinOnce();
       loop_rate.sleep();
