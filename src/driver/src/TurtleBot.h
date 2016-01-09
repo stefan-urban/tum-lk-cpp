@@ -103,10 +103,18 @@ private:
   // ...
   ros::Subscriber pose_subscriber;
 
+  /// Subscriber for bumper state changes
+  ros::Subscriber bumper_subscriber;
+
   /**
    * Callback for current robot pose
    */
   void poseCallback(const nav_msgs::Odometry::ConstPtr& odom);
+
+  /**
+   * Callback for bumper state
+   */
+  void bumperCallback(const turtlebot_node::TurtlebotSensorState::ConstPtr& msg);
 
   /**
    * Current position relative to starting point

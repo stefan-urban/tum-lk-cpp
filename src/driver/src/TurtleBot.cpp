@@ -5,7 +5,8 @@ TurtleBot::TurtleBot()
 {
   velcmd_publisher = node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 10);
 
-  ros::Subscriber pose_subscriber = node.subscribe("/odom", 1, &TurtleBot::poseCallback, this);
+  pose_subscriber = node.subscribe("/odom", 1, &TurtleBot::poseCallback, this);
+  bumper_subscriber = node.subscribe<turtlebot_node::TurtlebotSensorState>("/turtlebot_node/sensor_state", 1000, &TurtleBot::bumperCallback, this);
 }
 
 void TurtleBot::move(geometry_msgs::Point destination)
@@ -80,4 +81,16 @@ void TurtleBot::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
   tf_broadcaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "turtlebot_base"));
 
   current_position = odom->pose.pose.position;
+}
+
+void TurtleBot::bumperCallback(const turtlebot_node::TurtlebotSensorState::ConstPtr& msg)
+{
+  if(msg->bumps_wheeldrops != 0)
+  {
+    // save the last action and initate a back off
+    last_state = current_state;
+    current_state = BUMPERHIT_BACK_OFF;
+
+    // call move and drive backwards here, turning left or right, based on the laser data if available
+  }
 }
