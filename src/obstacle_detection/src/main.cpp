@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include <obstacle_detection/Obstacle.h>
 #include <obstacle_detection/ObstacleArray.h>
+#include <random>
 
 int main(int argc, char** argv)
 {
@@ -19,14 +20,24 @@ int main(int argc, char** argv)
 
   while (ros::ok())
   {
-    // ... todo
+    obstacle_detection::ObstacleArray obstacles;
 
-    if (false)
+    // Test code
+    for (int i = 0; i < 2; ++i)
     {
-      obstacle_detection::ObstacleArray obstacles;
+      obstacle_detection::Obstacle obs;
+      obs.unique_id = std::rand() % 100;
 
-      obstacle_pub.publish(obstacles);
+      obs.pose.position.x = std::rand() % 10;
+      obs.pose.position.y = std::rand() % 15 + 15;
+
+      obstacles.obstacles.push_back(obs);
     }
+
+    // Populate header
+    obstacles.header.stamp = ros::Time::now();
+
+    obstacle_pub.publish(obstacles);
 
     ros::spinOnce();
     loop_rate.sleep();

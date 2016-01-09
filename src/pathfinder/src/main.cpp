@@ -2,19 +2,21 @@
 #include <geometry_msgs/PointStamped.h>
 #include <aruco_msgs/Marker.h>
 #include <aruco_msgs/MarkerArray.h>
+#include <map>
 #include <vector>
 
 #include <pathfinder/Path.h>
+#include <obstacle_detection/Obstacle.h>
+#include <obstacle_detection/ObstacleArray.h>
 
 #include "Pathfinder.h"
 
 
-std::vector<aruco_msgs::Marker> markers;
 std::vector<geometry_msgs::PointStamped> marker_positions(8);
 
 void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array)
 {
-  markers = marker_array->markers;
+  std::vector<aruco_msgs::Marker> markers = marker_array->markers;
 
   for (aruco_msgs::Marker &marker : markers)
   {
@@ -24,6 +26,19 @@ void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array)
     point.point = marker.pose.pose.position;
 
     marker_positions[marker.id] = point;
+  }
+}
+
+std::vector<obstacle_detection::Obstacle> obstacles;
+
+void obstaclesCallback(const obstacle_detection::ObstacleArrayConstPtr& obstacle_array)
+{
+  obstacles = obstacle_array->obstacles;
+
+  for (obstacle_detection::Obstacle &obstacle : obstacles)
+  {
+    // Search if Unique ID is already used
+    ROS_INFO_STREAM("Received obstacle #" << obstacle.unique_id << " at " << obstacle.pose.position.x << "-" << obstacle.pose.position.y);
   }
 }
 
@@ -37,10 +52,13 @@ int main(int argc, char** argv)
   ros::start();
   ROS_INFO_STREAM("Startup!");
 
-  // Subcribe markers
+  // Subcribe to AruCo markers
   ros::Subscriber markers_sub = node.subscribe("/aruco_marker_publisher/markers", 1, &markersCallback);
 
-  // Publisher for paths
+  // Subcribe to obstacles
+  ros::Subscriber obstacles_sub = node.subscribe("/obstacles", 1, &obstaclesCallback);
+
+  // Publisher for available paths
   ros::Publisher path_pub = node.advertise<pathfinder::Path>("/paths", 10);
 
   // Constantly determine paths to all known AruCo codes
@@ -53,14 +71,11 @@ int main(int argc, char** argv)
   {
     unsigned int counter = 0;
 
-//    ROS_INFO("-----------------------------------------");
-
     for (auto destination = marker_positions.begin(); destination != marker_positions.end() ; ++destination, ++counter)
     {
-      // Check if element is available
+      // Check if AruCo code is even available
       if (destination->header.stamp.sec == 0)
       {
-//        ROS_INFO_STREAM("ID #" << counter << " not set.");
         continue;
       }
 
@@ -69,13 +84,11 @@ int main(int argc, char** argv)
 
       if (age.sec > 4)
       {
+        // Delete outdated information
         marker_positions.erase(marker_positions.begin() + counter);
 
-//        ROS_INFO_STREAM("ID #" << counter << " unset.");
         continue;
       }
-
-//      ROS_INFO_STREAM("ID #" << counter << " was set " << age.sec << " seconds ago.");
 
       // Calculate waypoints on path
       pathfinder::Path path;
