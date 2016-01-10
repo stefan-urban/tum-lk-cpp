@@ -1,7 +1,7 @@
 #include "TurtleBot.h"
 
 TurtleBot::TurtleBot()
-  : current_state(TurtleBotState::IDLE), last_state(TurtleBotState::IDLE)
+  : current_rotation(0.0f), current_state(TurtleBotState::IDLE), last_state(TurtleBotState::IDLE)
 {
   velcmd_publisher = node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 10);
 
@@ -11,11 +11,16 @@ TurtleBot::TurtleBot()
 
 void TurtleBot::move(geometry_msgs::Point destination)
 {
-  current_position;
+  current_position = getPosition();
+
+  current_state = MOVING_TO_LOCATION;
 }
 
 void TurtleBot::move(geometry_msgs::Twist twist)
 {
+  current_position = getPosition();
+  current_state = MOVING_TWIST;
+  
   velcmd_publisher.publish(twist);
 }
 
@@ -48,14 +53,37 @@ void TurtleBot::tick()
       break;
 
     case TurtleBotState::RANDOM_WALK:
+    {
       // Keep this state until the specified marker has been found.
+      // Move forward until either a bumper has been hit or the laser scan
+      // has found an obstacle in the way.
+
+      // Some dummy code for driving forward
+      geometry_msgs::Twist movement_message;
+      movement_message.linear.x = 1;
+
+      velcmd_publisher.publish(movement_message);
+
+
       break;
+    }
 
     case TurtleBotState::MOVING_TO_LOCATION:
+    {
       // Keep this state until the location has been reached.
-      // Either measure when the robot has stopped (for calls to move() with twist-values or
-      // linear and angular speed) or compare the current position to the destination.
-      /// @todo: break this up into an extra state for movements via linear/angular speed and twist messages?
+      float distanceSqr = (destination.x - current_position.x) * (destination.x - current_position.x) +
+                          (destination.y - current_position.y) * (destination.y - current_position.y);
+      if (distanceSqr < 1)
+      {
+        current_state = TurtleBotState::IDLE;
+      } else {
+        // continue movement, ie publish movement message
+      }
+      break;
+    }
+
+    case TurtleBotState::MOVING_TWIST:
+      // If the robot didn't move for 2-3 calls the moving has completed (just like with the wall detection in the homework)
       break;
 
     case TurtleBotState::BUMPERHIT_BACK_OFF:
@@ -81,6 +109,7 @@ void TurtleBot::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
   tf_broadcaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "turtlebot_base"));
 
   current_position = odom->pose.pose.position;
+  current_rotation = tf::getYaw(odom->pose.pose.orientation);
 }
 
 void TurtleBot::bumperCallback(const turtlebot_node::TurtlebotSensorState::ConstPtr& msg)

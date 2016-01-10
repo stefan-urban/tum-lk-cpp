@@ -16,7 +16,9 @@ enum class TurtleBotState
 {
   IDLE, ///< no movement
   RANDOM_WALK, ///< searching for the specified marker while avoiding obstacles
+  MOVING_TWIST, ///< Moving according to a twist message
   MOVING_TO_LOCATION, ///< moving to the given location
+  ROTATING, ///< indicates ongoing rotation movement of the robot
   BUMPERHIT_BACK_OFF, ///< executed when a bumper sensor signals a hit
 };
 
@@ -103,7 +105,9 @@ private:
   // ...
   ros::Subscriber pose_subscriber;
 
-  /// Subscriber for bumper state changes
+  /**
+   * Subscriber for bumper state changes
+   */
   ros::Subscriber bumper_subscriber;
 
   /**
@@ -125,6 +129,16 @@ private:
    *     z : always 0 because of 2D navigation
    */
   geometry_msgs::Point current_position;
+
+  /**
+   * Current rotation of the robot
+   */
+  float current_rotation;
+
+  /**
+   * Destination for moving to a specific location
+   */
+  geometry_msgs::Point destination;
 
   // ...
   tf::TransformBroadcaster tf_broadcaster;
