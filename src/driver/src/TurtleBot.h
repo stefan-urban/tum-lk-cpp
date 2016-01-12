@@ -8,6 +8,7 @@
 #include <geometry_msgs/Point.h>
 #include <nav_msgs/Odometry.h>
 #include <tf/transform_broadcaster.h>
+//#include <turtlebot_node/TurtlebotSensorState.h>
 #include <string>
 
 
@@ -82,7 +83,7 @@ public:
    * @param marker_number: The ID of the AruCo marker the robot will search for
    *                       by driving around (random walk) while avoiding
    *                       obstacles.
-   */ 
+   */
   void searchMarker(int marker_number);
 
   /**
@@ -118,7 +119,7 @@ private:
   /**
    * Callback for bumper state
    */
-  void bumperCallback(const turtlebot_node::TurtlebotSensorState::ConstPtr& msg);
+  //void bumperCallback(const turtlebot_node::TurtlebotSensorState::ConstPtr& msg);
 
   /**
    * Current position relative to starting point

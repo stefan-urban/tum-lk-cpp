@@ -6,21 +6,19 @@ TurtleBot::TurtleBot()
   velcmd_publisher = node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 10);
 
   pose_subscriber = node.subscribe("/odom", 1, &TurtleBot::poseCallback, this);
-  bumper_subscriber = node.subscribe<turtlebot_node::TurtlebotSensorState>("/turtlebot_node/sensor_state", 1000, &TurtleBot::bumperCallback, this);
+  //bumper_subscriber = node.subscribe<turtlebot_node::TurtlebotSensorState>("/turtlebot_node/sensor_state", 1000, &TurtleBot::bumperCallback, this);
 }
 
 void TurtleBot::move(geometry_msgs::Point destination)
 {
-  current_position = getPosition();
 
-  current_state = MOVING_TO_LOCATION;
+  current_state = TurtleBotState::MOVING_TO_LOCATION;
 }
 
 void TurtleBot::move(geometry_msgs::Twist twist)
 {
-  current_position = getPosition();
-  current_state = MOVING_TWIST;
-  
+  current_state = TurtleBotState::MOVING_TWIST;
+
   velcmd_publisher.publish(twist);
 }
 
@@ -112,7 +110,7 @@ void TurtleBot::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
   current_rotation = tf::getYaw(odom->pose.pose.orientation);
 }
 
-void TurtleBot::bumperCallback(const turtlebot_node::TurtlebotSensorState::ConstPtr& msg)
+/*void TurtleBot::bumperCallback(const turtlebot_node::TurtlebotSensorState::ConstPtr& msg)
 {
   if(msg->bumps_wheeldrops != 0)
   {
@@ -122,4 +120,4 @@ void TurtleBot::bumperCallback(const turtlebot_node::TurtlebotSensorState::Const
 
     // call move and drive backwards here, turning left or right, based on the laser data if available
   }
-}
+}*/
