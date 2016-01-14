@@ -48,6 +48,15 @@ public:
   */
   bool isFinished = false;
 
+  /**
+   * Gets the ID of this state
+   * @return the ID of the state
+   */
+  StateID getID()
+  {
+    return stateID;
+  }
+
 private:
   /**
    * The type of the state. All types are specified in the Enum TurtleBotState.

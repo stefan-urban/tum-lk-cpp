@@ -21,13 +21,16 @@ public:
   /**
    * Switch to a new state. For the last active state, pause() will be called.
    * @param state: The new state.
+   * @return false if the new state could not be set (this will be the case
+   *         when a state with id StateID::BUMPERHIT is currently active;
+   *         simply try again on the next tick), true otherwise
    */
-  void push_state(std::shared_ptr<State> state);
+  bool push_state(std::shared_ptr<State> state);
 
   /**
    * Pop the current state. For the next state on the stack, resume() will be
-   * called. When there should be no state left, TurtleBotState::IDLE will be
-   * pushed onto the stack.
+   * called. When there is be no state left, a new idle state will be pushed
+   * onto the stack.
    */
   void pop_state();
 
@@ -36,6 +39,12 @@ public:
    * state.
    */
   void tick();
+
+  /**
+   * Returns the currently active state.
+   * @returns currently active state
+   */
+  std::shared_ptr<State> currentState();
 
 private:
   std::vector<std::shared_ptr<State>> states;
