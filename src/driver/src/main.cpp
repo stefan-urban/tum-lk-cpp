@@ -1,7 +1,9 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Point.h>
 
-#include "TurtleBot.h"
+#include "Utility.h"
+#include "Driver.h"
+
 
 int main(int argc, char** argv)
 {
@@ -13,7 +15,7 @@ int main(int argc, char** argv)
   ros::start();
   ROS_INFO_STREAM("Startup!");
 
-  TurtleBot robot;
+  Driver driver;
 
   // Go from AruCo code #0 to #7
   for (int code_id = 0; code_id <= 7; code_id++)
@@ -28,7 +30,7 @@ int main(int argc, char** argv)
 
         // If not, perform random walk
 
-      robot.tick();
+      driver.tick();
 
       ros::spinOnce();
       loop_rate.sleep();

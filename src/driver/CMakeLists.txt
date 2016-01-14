@@ -27,6 +27,13 @@ catkin_package(
 include_directories(${catkin_INCLUDE_DIRS})
 
 # Driver node
-add_executable(driver src/main.cpp src/TurtleBot.cpp)
+add_executable(driver
+               src/main.cpp
+               src/TurtleBot.cpp
+               src/StateManager.cpp
+               src/Driver.cpp
+               src/StateIdle.cpp)
+
 add_dependencies(driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 target_link_libraries(driver ${catkin_LIBRARIES} )
