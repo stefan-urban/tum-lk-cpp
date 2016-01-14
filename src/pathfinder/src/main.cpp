@@ -29,19 +29,6 @@ void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array)
   }
 }
 
-std::vector<obstacle_detection::Obstacle> obstacles;
-
-void obstaclesCallback(const obstacle_detection::ObstacleArrayConstPtr& obstacle_array)
-{
-  obstacles = obstacle_array->obstacles;
-
-  for (obstacle_detection::Obstacle &obstacle : obstacles)
-  {
-    // Search if Unique ID is already used
-    ROS_INFO_STREAM("Received obstacle #" << obstacle.unique_id << " at " << obstacle.pose.position.x << "-" << obstacle.pose.position.y);
-  }
-}
-
 int main(int argc, char** argv)
 {
   // Init
@@ -54,9 +41,6 @@ int main(int argc, char** argv)
 
   // Subcribe to AruCo markers
   ros::Subscriber markers_sub = node.subscribe("/aruco_marker_publisher/markers", 1, &markersCallback);
-
-  // Subcribe to obstacles
-  ros::Subscriber obstacles_sub = node.subscribe("/obstacles", 1, &obstaclesCallback);
 
   // Publisher for available paths
   ros::Publisher path_pub = node.advertise<pathfinder::Path>("/paths", 10);
@@ -92,10 +76,6 @@ int main(int argc, char** argv)
 
       // Calculate waypoints on path
       pathfinder::Path path;
-
-      path.header.stamp = ros::Time::now();
-      path.destination_id = counter;
-      path.waypoints = pathfinder.findPathTo(destination->point);
 
       path_pub.publish(path);
     }

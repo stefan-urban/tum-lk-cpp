@@ -7,6 +7,7 @@
 #include <vector>
 #include <obstacle_detection/Obstacle.h>
 #include <obstacle_detection/ObstacleArray.h>
+#include <aruco_msgs/MarkerArray.h>
 
 /**
  * Find a possible path from the robots position to a given destination
@@ -27,8 +28,11 @@ public:
 
 private:
   ros::NodeHandle node;
+  
   ros::Subscriber obstacles_sub;
   void obstaclesCallback(const obstacle_detection::ObstacleArrayConstPtr& obstacle);
+
+  std::vector<obstacle_detection::Obstacle> obstacles;
 };
 
 #endif /* __PATHFINDER_H */

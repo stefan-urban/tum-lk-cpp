@@ -4,4 +4,4 @@ Header header
 uint32 destination_id
 
 # Array of all waypoints that the robot has to target consecutively
-geometry_msgs/Point[] waypoints
+nav_msgs/Path path

@@ -12,13 +12,14 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   tf
   std_msgs
+  nav_msgs
   aruco_msgs
   obstacle_detection
 )
 
 # Messages files
 add_message_files( FILES Path.msg )
-generate_messages( DEPENDENCIES std_msgs geometry_msgs )
+generate_messages( DEPENDENCIES std_msgs nav_msgs )
 
 # Package configuration
 catkin_package(
