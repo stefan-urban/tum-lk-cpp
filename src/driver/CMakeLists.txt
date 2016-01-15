@@ -32,7 +32,11 @@ add_executable(driver
                src/TurtleBot.cpp
                src/StateManager.cpp
                src/Driver.cpp
-               src/StateIdle.cpp)
+               src/StateIdle.cpp
+               src/StateMovingTwist.cpp
+               src/StateMovingLocation.cpp
+               src/StateRotating.cpp
+               src/StateBumperhit.cpp)
 
 add_dependencies(driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
