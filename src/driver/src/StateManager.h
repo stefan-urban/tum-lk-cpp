@@ -16,7 +16,6 @@ class StateManager
 {
 public:
   StateManager();
-  ~StateManager();
 
   /**
    * Switch to a new state. For the last active state, pause() will be called.
@@ -28,11 +27,17 @@ public:
   bool push_state(std::shared_ptr<State> state);
 
   /**
-   * Pop the current state. For the next state on the stack, resume() will be
-   * called. When there is be no state left, a new idle state will be pushed
-   * onto the stack.
+   * Stop the current state. For the next state on the stack, resume() will be
+   * called, for the deleted state stop(). When there is be no state left, a new
+   * idle state will be pushed onto the stack.
    */
   void pop_state();
+
+  /**
+   * Stops all states and activates idle mode. For every state on the stack,
+   * stop() will be called.
+   */
+  void clear_states();
 
   /**
    * Update the logic of the FSM and calls tick() for the currently active
