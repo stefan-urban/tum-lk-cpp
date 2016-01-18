@@ -22,6 +22,14 @@ public:
   void gotoMarker(int id);
 
   /**
+   * Check if a path to the given aruco marker is available.
+   * @param id: ID of the aruco marker
+   * @return true if the path to the marker with the given id is available,
+   *         false otherwise
+   */
+  bool pathAvailable(int id);
+
+  /**
    * Drive around while avoiding obstacles. Use this when there is no waypoint
    * for the next aruco marker available.
    */
