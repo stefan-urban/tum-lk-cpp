@@ -17,7 +17,18 @@ int main(int argc, char** argv)
 
   Driver driver;
 
+  int aruco_id = 0;
+
+  /*while(ros::ok())
+  {
+
+    driver.tick();
+
+    ros::spinOnce();
+    loop_rate.sleep();
+  }*/
   // Go from AruCo code #0 to #7
+
   for (int code_id = 0; code_id <= 7; code_id++)
   {
     ros::Rate loop_rate(30.0);
@@ -31,9 +42,6 @@ int main(int argc, char** argv)
         // If not, perform random walk
 
       driver.tick();
-
-      ros::spinOnce();
-      loop_rate.sleep();
     }
   }
 

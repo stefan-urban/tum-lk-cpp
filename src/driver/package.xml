@@ -14,11 +14,13 @@
   <build_depend>tf</build_depend>
   <build_depend>aruco_msgs</build_depend>
   <build_depend>turtlebot_node</build_depend>
+  <build_depend>pathfinder</build_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>tf</run_depend>
   <run_depend>aruco_msgs</run_depend>
-  <run_depend>turtlebot_node</run_depend> 
+  <run_depend>turtlebot_node</run_depend>
+  <run_depend>pathfinder</run_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

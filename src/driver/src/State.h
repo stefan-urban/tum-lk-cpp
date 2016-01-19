@@ -37,16 +37,30 @@ public:
   virtual void resume() {};
 
   /**
+   * Signal the state that it will be paused until the new state has finished
+   * its work.
+   */
+  virtual void pause() {};
+
+  /**
+   * This function is called when the state is being stopped, albeit it has not
+   * yet finished its work.
+   */
+  virtual void stop() {};
+
+  /**
    * This function is called repeatedly.
    */
   virtual void tick() = 0;
 
   /**
-  * Signals whether this state has completed its work. When this is set to true
-  * before the end of the call to tick(), this state will be removed from the
-  * FSM.
-  */
-  bool isFinished = false;
+   * Checks if this state has finished its work so it can be removed.
+   * @return true if this state has finished its work
+   */
+   bool hasFinished()
+   {
+     return isFinished;
+   }
 
   /**
    * Gets the ID of this state
@@ -58,6 +72,13 @@ public:
   }
 
 private:
+  /**
+  * Signals whether this state has completed its work. When this is set to true
+  * before the end of the call to tick(), this state will be removed from the
+  * FSM.
+  */
+  bool isFinished = false;
+
   /**
    * The type of the state. All types are specified in the Enum TurtleBotState.
    */

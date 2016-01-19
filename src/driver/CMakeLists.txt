@@ -11,6 +11,8 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   tf
+  nav_msgs
+  pathfinder
 )
 
 # Package configuration
@@ -32,7 +34,12 @@ add_executable(driver
                src/TurtleBot.cpp
                src/StateManager.cpp
                src/Driver.cpp
-               src/StateIdle.cpp)
+               src/StateIdle.cpp
+               src/StateMovingTwist.cpp
+               src/StateMovingLocation.cpp
+               src/StateRotating.cpp
+               src/StateBumperhit.cpp
+               src/StateRandomWalk.cpp)
 
 add_dependencies(driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
