@@ -6,6 +6,8 @@
 #include <vector>
 #include <nav_msgs/GetPlan.h>
 #include <nav_msgs/Odometry.h>
+#include <nav_msgs/Path.h>
+#include <tf/transform_broadcaster.h>
 
 #include <pathfinder/Path.h>
 
@@ -44,6 +46,8 @@ int main(int argc, char** argv)
   ros::start();
   ROS_INFO_STREAM("Startup!");
 
+  tf::TransformBroadcaster br;
+
   // Subscribe to current pose
   ros::Subscriber pose_subscriber = node.subscribe("/odom", 1, poseCallback);
 
@@ -58,7 +62,7 @@ int main(int argc, char** argv)
 
   while (!ros::service::waitForService(service_name, ros::Duration(5.0)))
   {
-    ROS_INFO_STREAM("Waiting for service " << service_name << " to become available.");
+    //ROS_INFO_STREAM("Waiting for service " << service_name << " to become available.");
   }
 
   ros::ServiceClient planner_client = node.serviceClient<nav_msgs::GetPlan>(service_name);
@@ -92,6 +96,7 @@ int main(int argc, char** argv)
         // Delete outdated information
         marker_poses.erase(marker_poses.begin() + counter);
 
+        ROS_INFO_STREAM("Dropped goal_" << counter);
         continue;
       }
 
@@ -112,7 +117,14 @@ int main(int argc, char** argv)
       request.request.start.pose = current_pose;
 
       request.request.goal.header.frame_id = "map";
-      request.request.goal.pose = destination->pose;
+      //request.request.goal.pose = destination->pose;
+      request.request.goal.pose = current_pose;
+
+      // todo use tf functions
+      // robot x corresponds to x of aruco coordinates
+      // robot y corresponds to z of aruco coordinates
+      request.request.goal.pose.position.x += destination->pose.position.x;
+      request.request.goal.pose.position.y += destination->pose.position.z;
 
       request.request.tolerance = 0;
 
@@ -122,6 +134,15 @@ int main(int argc, char** argv)
       // Publish
       path.path = request.response.plan;
       path_pub.publish(path);
+
+      tf::Transform transform;
+      transform.setOrigin( tf::Vector3(request.request.goal.pose.position.x, request.request.goal.pose.position.y, request.request.goal.pose.position.z) );
+      tf::Quaternion q;
+      q.setRPY(0, 0, 0);
+      transform.setRotation(q);
+
+      br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "map", "goal_" + std::to_string(counter)));
+
     }
 
     ros::spinOnce();
