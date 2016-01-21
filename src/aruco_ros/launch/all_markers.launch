@@ -19,6 +19,6 @@
     </node>
 
     <!-- Broadcast topic poses on TF -->
-    <node name="aruco_tf_broadcaster" pkg="aruco_tf_broadcaster" name="broadcaster" />
+    <node name="aruco_tf_broadcaster" pkg="aruco_tf_broadcaster" type="broadcaster" />
 
 </launch>
