@@ -34,6 +34,6 @@ catkin_package(
 include_directories(${catkin_INCLUDE_DIRS})
 
 # Pathfinder node
-add_executable(pathfinder src/main.cpp)
+add_executable(pathfinder src/main.cpp src/TargetDetermination.cpp src/Planner.cpp)
 add_dependencies(pathfinder ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(pathfinder ${catkin_LIBRARIES} )
