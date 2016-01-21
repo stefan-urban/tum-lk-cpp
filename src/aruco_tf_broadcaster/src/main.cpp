@@ -4,6 +4,7 @@
 #include <aruco_msgs/Marker.h>
 #include <aruco_msgs/MarkerArray.h>
 #include <aruco_ros/aruco_ros_utils.h>
+#include <string>
 
 void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array)
 {
@@ -15,7 +16,7 @@ void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array)
     tf::Pose tf_pose;
     tf::poseMsgToTF(marker.pose.pose, tf_pose);
 
-    br.sendTransform(tf::StampedTransform(tf_pose, ros::Time::now(), "markers_link", "marker_" + marker.id));
+    br.sendTransform(tf::StampedTransform(tf_pose, ros::Time::now(), "markers_link", "marker_" + std::to_string(marker.id)));
   }
 }
 
