@@ -5,8 +5,9 @@
     <arg name="markerSize"      default="0.176"/>    <!-- in m -->
     <arg name="eye"             default="left"/>
     <arg name="marker_frame"    default="aruco_marker_frame"/>
-    <arg name="ref_frame"       default="camera_link"/>  <!-- leave empty and the pose will be published wrt param parent_name -->
+    <arg name="ref_frame"       default="camera_link"/>
 
+<!--
 
     <node pkg="aruco_ros" type="single" name="aruco_single_0">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
@@ -14,7 +15,7 @@
         <param name="image_is_rectified" value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="marker_id"          value="0"/>
-        <param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+        <param name="reference_frame"    value="$(arg ref_frame)"/>
         <param name="camera_frame"       value="$(arg ref_frame)"/>
         <param name="marker_frame"       value="$(arg marker_frame)_0" />
     </node>
@@ -25,7 +26,7 @@
         <param name="image_is_rectified" value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="marker_id"          value="1"/>
-        <param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+        <param name="reference_frame"    value="$(arg ref_frame)"/>
         <param name="camera_frame"       value="$(arg ref_frame)"/>
         <param name="marker_frame"       value="$(arg marker_frame)_1" />
     </node>
@@ -36,7 +37,7 @@
         <param name="image_is_rectified" value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="marker_id"          value="2"/>
-        <param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+        <param name="reference_frame"    value="$(arg ref_frame)"/>
         <param name="camera_frame"       value="$(arg ref_frame)"/>
         <param name="marker_frame"       value="$(arg marker_frame)_2" />
     </node>
@@ -47,7 +48,7 @@
         <param name="image_is_rectified" value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="marker_id"          value="3"/>
-        <param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+        <param name="reference_frame"    value="$(arg ref_frame)"/>
         <param name="camera_frame"       value="$(arg ref_frame)"/>
         <param name="marker_frame"       value="$(arg marker_frame)_3" />
     </node>
@@ -58,7 +59,7 @@
         <param name="image_is_rectified" value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="marker_id"          value="4"/>
-        <param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+        <param name="reference_frame"    value="$(arg ref_frame)"/>
         <param name="camera_frame"       value="$(arg ref_frame)"/>
         <param name="marker_frame"       value="$(arg marker_frame)_4" />
     </node>
@@ -69,10 +70,12 @@
         <param name="image_is_rectified" value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="marker_id"          value="5"/>
-        <param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+        <param name="reference_frame"    value="$(arg ref_frame)"/>
         <param name="camera_frame"       value="$(arg ref_frame)"/>
         <param name="marker_frame"       value="$(arg marker_frame)_5" />
     </node>
+
+  -->
 
     <node pkg="aruco_ros" type="single" name="aruco_single_6">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
@@ -80,10 +83,12 @@
         <param name="image_is_rectified" value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="marker_id"          value="6"/>
-        <param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+        <param name="reference_frame"    value="$(arg ref_frame)"/>
         <param name="camera_frame"       value="$(arg ref_frame)"/>
         <param name="marker_frame"       value="$(arg marker_frame)_6" />
     </node>
+
+    <!--
 
     <node pkg="aruco_ros" type="single" name="aruco_single_7">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
@@ -91,9 +96,11 @@
         <param name="image_is_rectified" value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="marker_id"          value="7"/>
-        <param name="reference_frame"    value="$(arg ref_frame)"/>   <!-- frame in which the marker pose will be refered -->
+        <param name="reference_frame"    value="$(arg ref_frame)"/>
         <param name="camera_frame"       value="$(arg ref_frame)"/>
         <param name="marker_frame"       value="$(arg marker_frame)_7" />
     </node>
+
+    -->
 
 </launch>
