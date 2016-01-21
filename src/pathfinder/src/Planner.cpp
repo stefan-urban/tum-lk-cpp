@@ -27,7 +27,7 @@ nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &goal)
   // Check if service is still available
   if (!move_base_service)
   {
-    ROS_FATAL("Move base does not provide path planner!");
+    ROS_FATAL("Move base does not provide path planner anymore!");
   }
 
   // Prepare request

@@ -30,4 +30,7 @@ private:
 
   ros::Subscriber markers_sub;
   void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array);
+
+  // Debug function, transform goals to tf
+  void debug_broadcast_tf();
 };
