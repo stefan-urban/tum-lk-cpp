@@ -8,7 +8,7 @@
     <arg name="ref_frame"       default="camera_link"/>  <!-- leave empty and the pose will be published wrt param parent_name -->
 
 
-    <node pkg="aruco_ros_id_0" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single_0">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
         <remap from="/image" to="/camera/rgb/image_rect_color" />
         <param name="image_is_rectified" value="True"/>
@@ -19,7 +19,7 @@
         <param name="marker_frame"       value="$(arg marker_frame)_0" />
     </node>
 
-    <node pkg="aruco_ros_id_1" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single_1">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
         <remap from="/image" to="/camera/rgb/image_rect_color" />
         <param name="image_is_rectified" value="True"/>
@@ -30,7 +30,7 @@
         <param name="marker_frame"       value="$(arg marker_frame)_1" />
     </node>
 
-    <node pkg="aruco_ros_id_2" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single_2">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
         <remap from="/image" to="/camera/rgb/image_rect_color" />
         <param name="image_is_rectified" value="True"/>
@@ -41,7 +41,7 @@
         <param name="marker_frame"       value="$(arg marker_frame)_2" />
     </node>
 
-    <node pkg="aruco_ros_id_3" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single_3">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
         <remap from="/image" to="/camera/rgb/image_rect_color" />
         <param name="image_is_rectified" value="True"/>
@@ -52,7 +52,7 @@
         <param name="marker_frame"       value="$(arg marker_frame)_3" />
     </node>
 
-    <node pkg="aruco_ros_id_4" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single_4">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
         <remap from="/image" to="/camera/rgb/image_rect_color" />
         <param name="image_is_rectified" value="True"/>
@@ -63,7 +63,7 @@
         <param name="marker_frame"       value="$(arg marker_frame)_4" />
     </node>
 
-    <node pkg="aruco_ros_id_5" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single_5">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
         <remap from="/image" to="/camera/rgb/image_rect_color" />
         <param name="image_is_rectified" value="True"/>
@@ -74,7 +74,7 @@
         <param name="marker_frame"       value="$(arg marker_frame)_5" />
     </node>
 
-    <node pkg="aruco_ros_id_6" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single_6">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
         <remap from="/image" to="/camera/rgb/image_rect_color" />
         <param name="image_is_rectified" value="True"/>
@@ -85,7 +85,7 @@
         <param name="marker_frame"       value="$(arg marker_frame)_6" />
     </node>
 
-    <node pkg="aruco_ros_id_7" type="single" name="aruco_single">
+    <node pkg="aruco_ros" type="single" name="aruco_single_7">
         <remap from="/camera_info" to="/camera/rgb/camera_info" />
         <remap from="/image" to="/camera/rgb/image_rect_color" />
         <param name="image_is_rectified" value="True"/>
