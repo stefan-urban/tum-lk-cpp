@@ -48,7 +48,7 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
 void TargetDetermination::debug_broadcast_tf()
 {
   static tf::TransformBroadcaster br;
-  
+
   for (const auto& goal : goals_)
   {
     tf::Pose tf_pose;
