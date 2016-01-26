@@ -32,4 +32,8 @@ private:
   geometry_msgs::PoseStamped current_pose_;
 
   ros::ServiceClient move_base_service;
+
+public:
+  // Debug function, transform all path points to tf
+  void debug_broadcast_tf(unsigned int id, nav_msgs::Path path);
 };

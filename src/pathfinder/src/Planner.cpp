@@ -1,5 +1,7 @@
 #include "Planner.h"
 #include <nav_msgs/GetPlan.h>
+#include <tf/transform_broadcaster.h>
+#include <tf/transform_datatypes.h>
 
 Planner::Planner()
 {
@@ -44,6 +46,7 @@ nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &goal)
   // Call service
   move_base_service.call(srv);
 
+
   return srv.response.plan;
 }
 
@@ -51,4 +54,19 @@ void Planner::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
 {
   current_pose_.header = odom->header;
   current_pose_.pose = odom->pose.pose;
+}
+
+void Planner::debug_broadcast_tf(unsigned int id, nav_msgs::Path path)
+{
+  static tf::TransformBroadcaster br;
+
+  unsigned int counter = 0;
+
+  for (const auto& goal : path.poses)
+  {
+    tf::Pose tf_pose;
+    tf::poseMsgToTF(goal.pose, tf_pose);
+
+    br.sendTransform(tf::StampedTransform(tf_pose, ros::Time::now(), "map", "path" + std::to_string(counter++) + "_" + std::to_string(id)));
+  }
 }

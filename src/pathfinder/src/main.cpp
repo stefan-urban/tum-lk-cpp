@@ -40,6 +40,10 @@ int main(int argc, char** argv)
       // Calc path
       nav_msgs::Path path = p.makePlan(goal.second);
 
+      // debug
+      p.debug_broadcast_tf(goal.first, path);
+
+
       // Publish path
       pathfinder::Path msg;
 
