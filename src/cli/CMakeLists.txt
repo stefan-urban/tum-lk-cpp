@@ -10,6 +10,7 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  nav_msgs
 )
 
 catkin_package()
@@ -21,7 +22,8 @@ include_directories(
 # ------------------------------------------------------------------------------
 # Build configuration
 
-add_executable(cli src/main.cpp src/CommandLine.cpp)
+file(GLOB my_sources src/*.cpp)
+add_executable(cli ${my_sources})
 add_dependencies(cli ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(cli
