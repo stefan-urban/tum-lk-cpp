@@ -2,12 +2,11 @@
 #include <nav_msgs/GetPlan.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
+#include <tf/transform_listener.h>
+
 
 Planner::Planner()
 {
-  // Subscribe to current pose
-  pose_subscriber = node.subscribe("/odom", 1, &Planner::poseCallback, this);
-
   // Wait for move_base to start up
   while (!ros::service::waitForService(planner_service_name, ros::Duration(3.0)) || !ros::ok())
   {
@@ -24,7 +23,7 @@ Planner::Planner()
 
 }
 
-nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &goal)
+nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &start, const geometry_msgs::PoseStamped &goal)
 {
   // Check if service is still available
   if (!move_base_service)
@@ -35,25 +34,13 @@ nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &goal)
   // Prepare request
   nav_msgs::GetPlan srv;
 
-  // Current position is start point
-  srv.request.start = current_pose_;
-  srv.request.start.header.frame_id = frame_id;
-
-  // Goal is destination
+  srv.request.start = start;
   srv.request.goal = goal;
-  srv.request.goal.header.frame_id = frame_id;
 
   // Call service
   move_base_service.call(srv);
 
-
   return srv.response.plan;
-}
-
-void Planner::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
-{
-  current_pose_.header = odom->header;
-  current_pose_.pose = odom->pose.pose;
 }
 
 void Planner::debug_broadcast_tf(unsigned int id, nav_msgs::Path path)

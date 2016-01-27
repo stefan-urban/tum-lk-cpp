@@ -5,6 +5,7 @@
 #include <geometry_msgs/PoseStamped.h>
 #include <aruco_msgs/MarkerArray.h>
 
+
 /**
  * Provides all possible navigation goals, stores position even if they are not
  * visible by the sensor anymore
@@ -12,7 +13,7 @@
 class TargetDetermination
 {
 public:
-  const std::string markers_topic = "/aruco_marker_publisher/markers";
+  const std::string markers_topic = "/aruco_marker/markers";
 
   /**
    * Constructor: Subscribes to aruco topic
@@ -30,7 +31,4 @@ private:
 
   ros::Subscriber markers_sub;
   void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array);
-
-  // Debug function, transform goals to tf
-  void debug_broadcast_tf();
 };

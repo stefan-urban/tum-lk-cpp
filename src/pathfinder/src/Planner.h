@@ -22,15 +22,10 @@ public:
   /**
    * Make a plan to a given goal from the current position
    */
-  nav_msgs::Path makePlan(const geometry_msgs::PoseStamped &goal);
+  nav_msgs::Path makePlan(const geometry_msgs::PoseStamped &start, const geometry_msgs::PoseStamped &goal);
 
 private:
   ros::NodeHandle node;
-
-  ros::Subscriber pose_subscriber;
-  void poseCallback(const nav_msgs::Odometry::ConstPtr& odom);
-  geometry_msgs::PoseStamped current_pose_;
-
   ros::ServiceClient move_base_service;
 
 public:

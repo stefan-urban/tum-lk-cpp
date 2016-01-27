@@ -20,40 +20,15 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
 
   for (const aruco_msgs::Marker &marker : markers)
   {
-    // Define stamped pose
+    // @todo: Do not use aruco code position, instead try to reach pose 0.5m in
+    //        front of it
+
+    // Convert pose with covariance to
     geometry_msgs::PoseStamped pose;
+
+    pose.header = marker.header;
     pose.pose = marker.pose.pose;
 
-    // @todo: there has to be a function that does this in one line!
-
-    // Find if already in storage
-    std::map<unsigned int, geometry_msgs::PoseStamped>::iterator it = goals_.find(marker.id);
-
-    if( it != goals_.end() )
-    {
-      // Found, replace
-      goals_[marker.id] = pose;
-    }
-    else
-    {
-      // Not found, insert
-      goals_.insert(std::pair<unsigned int, geometry_msgs::PoseStamped>(marker.id, pose));
-    }
-  }
-
-  // debug
-  debug_broadcast_tf();
-}
-
-void TargetDetermination::debug_broadcast_tf()
-{
-  static tf::TransformBroadcaster br;
-
-  for (const auto& goal : goals_)
-  {
-    tf::Pose tf_pose;
-    tf::poseMsgToTF(goal.second.pose, tf_pose);
-
-    br.sendTransform(tf::StampedTransform(tf_pose, ros::Time::now(), "map", "goal_" + std::to_string(goal.first)));
+    goals_[marker.id] = pose;
   }
 }
