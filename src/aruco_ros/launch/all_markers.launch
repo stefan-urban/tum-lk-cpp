@@ -2,10 +2,11 @@
     <include file="$(find aruco_ros)/launch/camera.launch" />
 
     <arg name="markerSize"      default="0.176"/>    <!-- in m -->
-    <arg name="ref_frame"       default="markers_link"/>
+    <arg name="ref_frame"       default="map"/>
+    <arg name="cam_frame"       default="markers_link"/>
 
     <!-- Rotate aruc marker coordinate system to camera coordinate system -->
-    <node name="camera_to_markers_link" pkg="tf" type="static_transform_publisher" args="0 0 0 -1.570796 0 -1.570796 camera_link $(arg ref_frame) 100" />
+    <node name="camera_to_markers_link" pkg="tf" type="static_transform_publisher" args="0 0 0 -1.570796 0 -1.570796 camera_link $(arg cam_frame) 100" />
 
     <!-- Publish all markers through one topic -->
     <node pkg="aruco_ros" type="marker_publisher" name="aruco_marker">
@@ -15,7 +16,7 @@
         <param name="use_camera_info"    value="True"/>
         <param name="marker_size"        value="$(arg markerSize)"/>
         <param name="reference_frame"    value="$(arg ref_frame)"/>
-        <param name="camera_frame"       value="$(arg ref_frame)"/>
+        <param name="camera_frame"       value="$(arg cam_frame)"/>
     </node>
 
     <!-- Broadcast topic poses on TF -->
