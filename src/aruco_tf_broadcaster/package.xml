@@ -2,7 +2,7 @@
 <package>
   <name>aruco_tf_broadcaster</name>
   <version>1.0.0</version>
-  <description>Broadcast all aruco marker positions as tf transforms.</description>
+  <description>Saves and broadcasts all aruco marker positions as tf transforms.</description>
 
   <maintainer email="stefan.urban@tum.de">Stefan Urban</maintainer>
 
