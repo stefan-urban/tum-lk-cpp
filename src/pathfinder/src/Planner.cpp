@@ -16,7 +16,7 @@ Planner::Planner()
   // Setup service
   move_base_service = node.serviceClient<nav_msgs::GetPlan>(planner_service_name);
 
-  if (!move_base_service)
+  if (!move_base_service.isValid())
   {
     ROS_FATAL("Move base does not provide path planner!");
   }
@@ -26,7 +26,7 @@ Planner::Planner()
 nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &start, const geometry_msgs::PoseStamped &goal)
 {
   // Check if service is still available
-  if (!move_base_service)
+  if (!move_base_service.isValid())
   {
     ROS_FATAL("Move base does not provide path planner anymore!");
   }
@@ -37,23 +37,34 @@ nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &start, const 
   srv.request.start = start;
   srv.request.goal = goal;
 
+  //ROS_INFO_STREAM("start: " << srv.request.start.pose.position.x << " - " << srv.request.start.pose.position.y << " - " << srv.request.start.pose.position.z);
+  //ROS_INFO_STREAM("goal: " << srv.request.goal.pose.position.x << " - " << srv.request.goal.pose.position.y << " - " << srv.request.goal.pose.position.z);
+
+  ros::Duration(0.1).sleep();
+
   // Call service
   move_base_service.call(srv);
+
+  ROS_INFO_STREAM("Did receive : " << srv.response.plan.poses.size() << " steps.");
 
   return srv.response.plan;
 }
 
 void Planner::debug_broadcast_tf(unsigned int id, nav_msgs::Path path)
 {
-  static tf::TransformBroadcaster br;
-
-  unsigned int counter = 0;
-
-  for (const auto& goal : path.poses)
+  if (path.poses.size() < 2)
   {
-    tf::Pose tf_pose;
-    tf::poseMsgToTF(goal.pose, tf_pose);
-
-    br.sendTransform(tf::StampedTransform(tf_pose, ros::Time::now(), "map", "path" + std::to_string(counter++) + "_" + std::to_string(id)));
+    return;
   }
+
+  static tf::TransformBroadcaster br;
+  tf::Pose tf_pose;
+
+  // First
+  tf::poseMsgToTF(path.poses.front().pose, tf_pose);
+  br.sendTransform(tf::StampedTransform(tf_pose, ros::Time::now(), "map", "path_" + std::to_string(id) + "_start"));
+
+  // Last
+  tf::poseMsgToTF(path.poses.back().pose, tf_pose);
+  br.sendTransform(tf::StampedTransform(tf_pose, ros::Time::now(), "map", "path_" + std::to_string(id) + "_end"));
 }

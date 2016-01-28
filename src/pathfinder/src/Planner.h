@@ -11,7 +11,8 @@
 class Planner
 {
 public:
-  const std::string planner_service_name = "/move_base/make_plan";
+  //const std::string planner_service_name = "/move_base/make_plan";
+  const std::string planner_service_name = "/move_base/NavfnROS/make_plan";
   const std::string frame_id = "map";
 
   /**

@@ -2,7 +2,7 @@
 #include "TargetDetermination.h"
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
-
+#include <tf/transform_listener.h>
 
 TargetDetermination::TargetDetermination()
 {
@@ -28,6 +28,8 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
 
     pose.header = marker.header;
     pose.pose = marker.pose.pose;
+
+    pose.pose.position.z = 0;
 
     goals_[marker.id] = pose;
   }
