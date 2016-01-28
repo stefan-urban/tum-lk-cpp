@@ -14,6 +14,7 @@ class TargetDetermination
 {
 public:
   const std::string markers_topic = "/aruco_marker/markers";
+  const float goal_distance_from_marker = 0.3;
 
   /**
    * Constructor: Subscribes to aruco topic

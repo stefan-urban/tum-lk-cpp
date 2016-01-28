@@ -1,5 +1,6 @@
 
 #include "TargetDetermination.h"
+#include <geometry_msgs/PoseStamped.h>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
 #include <tf/transform_listener.h>
@@ -20,17 +21,31 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
 
   for (const aruco_msgs::Marker &marker : markers)
   {
-    // @todo: Do not use aruco code position, instead try to reach pose 0.5m in
-    //        front of it
+    // Create pose
+    geometry_msgs::Pose msg_pose = marker.pose.pose;
 
-    // Convert pose with covariance to
-    geometry_msgs::PoseStamped pose;
+    // We only do 2D, so omit z coordinate
+    msg_pose.position.z = 0;
 
-    pose.header = marker.header;
-    pose.pose = marker.pose.pose;
+    // Convert to TF
+    tf::Pose tf_pose;
+    tf::poseMsgToTF(msg_pose, tf_pose);
 
-    pose.pose.position.z = 0;
+    // Move goal to place in front of marker
+    tf::Transform trans;
+    trans.setOrigin( tf::Vector3(goal_distance_from_marker, 0.0, 0.0) );
+    trans.setRotation( tf::Quaternion() );
 
-    goals_[marker.id] = pose;
+    tf_pose *= trans;
+
+    // Convert back to msg pose
+    tf::poseTFToMsg(tf_pose, msg_pose);
+
+    // Create stamped pose
+    geometry_msgs::PoseStamped msg_posestamped;
+    msg_posestamped.header = marker.header;
+    msg_posestamped.pose = msg_pose;
+
+    goals_[marker.id] = msg_posestamped;
   }
 }
