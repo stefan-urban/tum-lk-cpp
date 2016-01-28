@@ -7,9 +7,9 @@ TurtleBot Aruco Code Follower
 - [RPLIDAR driver wrapper](https://github.com/robopeak/rplidar_ros)
 - [Aruco library wrapper](https://github.com/pal-robotics/aruco_ros)
 
-## Anleitung
+## Anleitung für SLAM
 
-#### Auf Roboter für SLAM:
+#### Auf Roboter:
 
 ```
 roscore
@@ -17,7 +17,23 @@ roslaunch turtlebot_bringup minimal.launch
 roslaunch pathfinder slam.launch
 ```
 
-#### Auf Roboter für AMCL:
+Mit dem Teleop-Funktionen kann der Roboter nun bewegt werden, um eine Karte zu generieren.
+
+#### Auf PC (nur für Visualisierung):
+
+```
+roslaunch turtlebot_rviz_launchers view_navigation.launch
+```
+
+#### Karte speichern
+Die Karte muss im Anschluss noch in der amcl.launch eingebunden werden.
+```
+rosrun map_server map_saver -f mymap
+```
+
+## Anleitung für Follower Mode
+
+#### Auf Roboter:
 
 ```
 roscore
