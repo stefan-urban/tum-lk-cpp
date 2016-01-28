@@ -46,6 +46,7 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
     msg_posestamped.header = marker.header;
     msg_posestamped.pose = msg_pose;
 
+    // And save
     goals_[marker.id] = msg_posestamped;
   }
 }
