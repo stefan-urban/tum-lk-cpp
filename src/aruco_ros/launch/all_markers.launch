@@ -2,7 +2,7 @@
     <include file="$(find aruco_ros)/launch/camera.launch" />
 
     <arg name="markerSize"      default="0.176"/>    <!-- in m -->
-    <arg name="ref_frame"       default="map"/> <!-- @todo:  -->
+    <arg name="ref_frame"       default="map"/>
     <arg name="cam_frame"       default="markers_link"/>
 
     <!-- Rotate aruc marker coordinate system to camera coordinate system -->
