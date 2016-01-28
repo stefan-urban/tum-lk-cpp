@@ -47,6 +47,8 @@ void positionUpdate(const ros::TimerEvent&)
 
   // Determine orientation
   tf::quaternionTFToMsg(transform.getRotation(), current_position.pose.orientation);
+
+  ROS_INFO("Position updated!");
 }
 
 int main(int argc, char** argv)
@@ -64,7 +66,8 @@ int main(int argc, char** argv)
   // Wait for first position update
   while (ros::ok() && current_position.header.stamp.sec == 0)
   {
-    ros::Duration(0.2).sleep();
+    ros::spinOnce();
+    ros::Duration(0.1).sleep();
   }
 
   // Advertise paths topic

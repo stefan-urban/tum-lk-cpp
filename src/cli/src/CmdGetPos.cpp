@@ -39,8 +39,8 @@ std::string CmdGetPos::run()
 
       oss << "position:\n";
       oss << " - x: " << odom_.pose.pose.position.x << "\n";
-      oss << " - y: " << odom_.pose.pose.position.x << "\n";
-      oss << " - z: " << odom_.pose.pose.position.x << "";
+      oss << " - y: " << odom_.pose.pose.position.y << "\n";
+      oss << " - z: " << odom_.pose.pose.position.z << "";
 
       return oss.str();
     }
