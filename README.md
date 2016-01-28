@@ -1,4 +1,3 @@
-
 TurtleBot Aruco Code Follower
 =============================
 
@@ -17,7 +16,7 @@ roslaunch turtlebot_bringup minimal.launch
 roslaunch pathfinder slam.launch
 ```
 
-Mit dem Teleop-Funktionen kann der Roboter nun bewegt werden, um eine Karte zu generieren.
+Mit den Teleop-Funktionen kann der Roboter nun bewegt werden, um eine Karte zu generieren.
 
 #### Auf PC (nur für Visualisierung):
 
