@@ -72,8 +72,6 @@ int main(int argc, char** argv)
       msg.path = path;
 
       path_pub.publish(msg);
-
-      ROS_INFO_STREAM("Did publish path for #" << goal.first);
     }
 
     ros::spinOnce();

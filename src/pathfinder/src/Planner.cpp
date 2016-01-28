@@ -45,8 +45,6 @@ nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &start, const 
   // Call service
   move_base_service.call(srv);
 
-  ROS_INFO_STREAM("Did receive : " << srv.response.plan.poses.size() << " steps.");
-
   return srv.response.plan;
 }
 
