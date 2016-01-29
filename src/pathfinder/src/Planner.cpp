@@ -21,12 +21,27 @@ Planner::Planner()
     ROS_FATAL("Move base does not provide path planner!");
   }
 
+
+  // Wait for move_base to start up
+  while (!ros::service::waitForService(planner_service_name2, ros::Duration(3.0)) || !ros::ok())
+  {
+    //ROS_INFO_STREAM("Waiting for service " << service_name << " to become available.");
+  }
+
+  // Setup service
+  move_base_service2 = node.serviceClient<nav_msgs::GetPlan>(planner_service_name2);
+
+  if (!move_base_service2.isValid())
+  {
+    ROS_FATAL("Move base does not provide path planner2!");
+  }
+
 }
 
 nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &start, const geometry_msgs::PoseStamped &goal)
 {
   // Check if service is still available
-  if (!move_base_service.isValid())
+  if (!move_base_service.isValid() || !move_base_service2.isValid())
   {
     ROS_FATAL("Move base does not provide path planner anymore!");
   }
@@ -40,10 +55,26 @@ nav_msgs::Path Planner::makePlan(const geometry_msgs::PoseStamped &start, const 
   //ROS_INFO_STREAM("start: " << srv.request.start.pose.position.x << " - " << srv.request.start.pose.position.y << " - " << srv.request.start.pose.position.z);
   //ROS_INFO_STREAM("goal: " << srv.request.goal.pose.position.x << " - " << srv.request.goal.pose.position.y << " - " << srv.request.goal.pose.position.z);
 
-  ros::Duration(0.1).sleep();
+  // Brute force the plan out of move_base
+  unsigned int max_tries = 6;
 
-  // Call service
-  move_base_service.call(srv);
+  while (srv.response.plan.poses.size() == 0 && max_tries-- > 0)
+  {
+    if (max_tries % 2)
+    {
+      // Call service
+      move_base_service.call(srv);
+    }
+    else
+    {
+      // Call service
+      move_base_service2.call(srv);
+    }
+
+    ros::Duration(0.1).sleep();
+  }
+
+  ROS_INFO_STREAM("Did receive " << srv.response.plan.poses.size() << " steps.");
 
   return srv.response.plan;
 }

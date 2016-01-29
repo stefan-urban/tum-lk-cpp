@@ -17,8 +17,8 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 # Messages files
-add_message_files( FILES Path.msg )
-generate_messages( DEPENDENCIES std_msgs nav_msgs )
+add_message_files( FILES Path.msg Goal.msg Goals.msg )
+generate_messages( DEPENDENCIES std_msgs nav_msgs geometry_msgs )
 
 # Package configuration
 catkin_package(

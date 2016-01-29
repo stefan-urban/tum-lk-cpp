@@ -11,8 +11,8 @@
 class Planner
 {
 public:
-  //const std::string planner_service_name = "/move_base/make_plan";
-  const std::string planner_service_name = "/move_base/NavfnROS/make_plan";
+  const std::string planner_service_name = "/move_base/make_plan";
+  const std::string planner_service_name2 = "/move_base/NavfnROS/make_plan";
   const std::string frame_id = "map";
 
   /**
@@ -28,6 +28,7 @@ public:
 private:
   ros::NodeHandle node;
   ros::ServiceClient move_base_service;
+  ros::ServiceClient move_base_service2;
 
 public:
   // Debug function, transform all path points to tf

@@ -16,6 +16,8 @@ public:
   const std::string markers_topic = "/aruco_marker/markers";
   const float goal_distance_from_marker = 0.3;
 
+    void broadcastTf();
+    
   /**
    * Constructor: Subscribes to aruco topic
    */
@@ -26,10 +28,16 @@ public:
    */
   std::map<unsigned int, geometry_msgs::PoseStamped> getGoals();
 
+  /**
+   * Get a vector of goals
+   */
+  std::vector<geometry_msgs::PoseStamped> getGoalsVec();
+
 private:
   ros::NodeHandle node;
   std::map<unsigned int, geometry_msgs::PoseStamped> goals_;
 
   ros::Subscriber markers_sub;
   void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array);
+
 };

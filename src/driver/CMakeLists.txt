@@ -28,19 +28,18 @@ catkin_package(
 
 include_directories(${catkin_INCLUDE_DIRS})
 
-# Driver node
-add_executable(driver
-               src/main.cpp
-               src/TurtleBot.cpp
-               src/StateManager.cpp
-               src/Driver.cpp
-               src/StateIdle.cpp
-               src/StateMovingTwist.cpp
-               src/StateMovingLocation.cpp
-               src/StateRotating.cpp
-               src/StateBumperhit.cpp
-               src/StateRandomWalk.cpp)
+# Drive to one single goal
+add_executable(single_goal
+               src/single_goal.cpp)
 
-add_dependencies(driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(single_goal ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(driver ${catkin_LIBRARIES} )
+target_link_libraries(single_goal ${catkin_LIBRARIES} )
+
+# Drive to codes 0-7
+add_executable(multiple_goals
+               src/multiple_goals.cpp)
+
+add_dependencies(multiple_goals ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+target_link_libraries(multiple_goals ${catkin_LIBRARIES} )
