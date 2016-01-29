@@ -16,7 +16,9 @@ class StateManager
 {
 public:
   StateManager();
-  ~StateMaanger();
+  ~StateManager();
+
+  void setTurtleBot(std::shared_ptr<TurtleBot> bot);
 
   /**
    * Switch to a new state. For the last active state, pause() will be called.
@@ -52,9 +54,11 @@ public:
    */
   std::shared_ptr<State> currentState();
 
+  std::string getStateDescription();
+
 private:
   std::vector<std::shared_ptr<State>> states;
 
-  std::shaerd_ptr<TurtleBot> turtleBot;
+  std::shared_ptr<TurtleBot> turtleBot;
 
 };

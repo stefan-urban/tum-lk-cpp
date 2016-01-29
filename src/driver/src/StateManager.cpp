@@ -7,11 +7,15 @@ StateManager::StateManager()
   // when the stack is "empty", the robot is idling
   push_state(std::make_shared<StateIdle>());
 }
-StateManager::~SatteManager()
+StateManager::~StateManager()
 {
   clear_states(false);
 }
 
+void StateManager::setTurtleBot(std::shared_ptr<TurtleBot> bot)
+{
+  turtleBot = bot;
+}
 
 bool StateManager::push_state(std::shared_ptr<State> state)
 {
@@ -95,4 +99,9 @@ std::shared_ptr<State> StateManager::currentState()
   }
 
   return states.back();
+}
+
+std::string StateManager::getStateDescription()
+{
+  return stateNames[states.back()->getID()] + states.back()->getDescription();
 }

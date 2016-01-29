@@ -15,7 +15,6 @@ void TurtleBot::move(geometry_msgs::Point destination)
 
 void TurtleBot::move(geometry_msgs::Twist twist)
 {
-
   velcmd_publisher.publish(twist);
 }
 
@@ -29,12 +28,27 @@ void TurtleBot::move(float linear_speed, float angular_speed)
   move(twist);
 }
 
+void TurtleBot::stop()
+{
+  move(geometry_msgs::Twist());
+}
+
 float TurtleBot::getTurnAngle(geometry_msgs::Point targetLocation)
 {
   float targetAngle = atan2(current_position.x - targetLocation.x,
                             current_position.y - targetLocation.y);
 
   return targetAngle - current_rotation;                          
+}
+
+geometry_msgs::Point TurtleBot::getPosition()
+{
+  return current_position;
+}
+
+float TurtleBot::getRotation()
+{
+  return current_rotation;
 }
 
 void TurtleBot::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)

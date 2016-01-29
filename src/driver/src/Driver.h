@@ -47,6 +47,11 @@ public:
 
   void followPath(std::vector<geometry_msgs::Point> path);
 
+  std::string getStateDescription()
+  {
+    return stateManager.getStateDescription();
+  }
+
 private:
 
   /// ...
@@ -71,5 +76,8 @@ private:
   /**
    * Interface to the robot's current position and for movement orders.
    */
-  TurtleBot turtleBot;
+  std::shared_ptr<TurtleBot> turtleBot;
+
+  const int PATH_INTERP_MAX_WAYPOINTS = 10;
+  const float PATH_INTERP_MAX_ERROR = 1.0f;
 };
