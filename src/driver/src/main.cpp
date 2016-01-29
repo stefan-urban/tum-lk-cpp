@@ -42,6 +42,7 @@ int main(int argc, char** argv)
         // If not, perform random walk
 
       driver.tick();
+      //ROS_INFO_STREAM("Current state: " << driver.getStateDescription());
     }
   }
 

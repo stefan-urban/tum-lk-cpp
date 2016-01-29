@@ -44,9 +44,23 @@ public:
   void move(float linear_speed, float angular_speed);
 
   /**
+   * Stop the robot.
+   */
+  void stop();
+
+  /**
    * Returns robots position in relation to start point
    */
-  geometry_msgs::Vector3 getPosition();
+  geometry_msgs::Point getPosition();
+
+  float getRotation();
+
+
+  /**
+   + Returns the angle the turtle bot has to turn in order to face the target
+   * location.
+   */
+  float getTurnAngle(geometry_msgs::Point targetLocation);
 
 private:
   // ...

@@ -5,10 +5,12 @@
 class StateMovingLocation : public State
 {
 public:
-  StateMovingLocation();
+	StateMovingLocation(std::shared_ptr<TurtleBot> turtleBot, geometry_msgs::Point targetLocation);
+	
+	virtual void tick();
 
-  virtual void tick();
+	virtual std::string getDescription();
 
 private:
-
+	geometry_msgs::Point targetLocation;
 };

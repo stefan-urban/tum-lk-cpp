@@ -1,16 +1,28 @@
 #pragma once
 
+#include "TurtleBot.h"
+
 /**
  * Enum for identifying the states
  */
-enum class StateID
+enum StateID
 {
-  IDLE,                 ///< No movement
+  IDLE = 1,             ///< No movement
   RANDOM_WALK,          ///< Driving around while avoiding obstacles
   MOVING_TWIST,         ///< Moving according to a twist message
   MOVING_TO_LOCATION,   ///< Moving to the given location
   ROTATING,             ///< indicates ongoing rotation movement of the robot
   BUMPERHIT,            ///< executed when a bumper sensor signals a hit
+};
+
+const std::string stateNames[7] = {
+  "",
+  "IDLE",
+  "RANDOM_WALK",
+  "MOVING_TWIST",
+  "MOVING_TO_LOCATION",
+  "ROTATING",
+  "BUMPERHIT"
 };
 
 /**
@@ -19,6 +31,10 @@ enum class StateID
 class State
 {
 public:
+  State(StateID stateID, std::shared_ptr<TurtleBot> bot)
+    : stateID(stateID), turtleBot(bot)
+  {
+  }
   State(StateID stateID)
     : stateID(stateID)
   {
@@ -54,13 +70,26 @@ public:
   virtual void tick() = 0;
 
   /**
+    * This function returns general information about the current state.
+    */
+  virtual std::string getDescription()
+  {
+    return "";
+  }
+
+  /**
    * Checks if this state has finished its work so it can be removed.
    * @return true if this state has finished its work
    */
-   bool hasFinished()
-   {
-     return isFinished;
-   }
+  bool hasFinished()
+  {
+    return isFinished;
+  }
+  
+  void setFinished(bool finished)
+  {
+    isFinished = finished;
+  }
 
   /**
    * Gets the ID of this state
@@ -71,6 +100,10 @@ public:
     return stateID;
   }
 
+  std::shared_ptr<TurtleBot> getTurtleBot()
+  {
+    return turtleBot;
+  }
 private:
   /**
   * Signals whether this state has completed its work. When this is set to true
@@ -83,4 +116,6 @@ private:
    * The type of the state. All types are specified in the Enum TurtleBotState.
    */
   StateID stateID;
+
+  std::shared_ptr<TurtleBot> turtleBot;
 };
