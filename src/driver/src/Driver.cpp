@@ -5,11 +5,16 @@
 Driver::Driver()
 {
   //waypoint_subscriber = node.subscribe("/path_waypoints", 1, &Driver::waypoint_callback, this);
-  std::cout << "driver" << 1 << std::endl;
 }
 
 void Driver::gotoMarker(int id)
 {
+  
+}
+
+bool Driver::pathAvailable(int id)
+{
+  return false;
 }
 
 bool Driver::performRandomWalk()
@@ -40,6 +45,7 @@ void Driver::waypoint_callback(const pathfinder::PathConstPtr &pathmsg)
   if(id > 7)
     return;
 
-  if(paths[id].seq > pathmsg->path.seq)
+  // @todo: determine better way to check for a updated path
+  if(paths[id].header.seq > pathmsg->path.header.seq)
     paths[id] = pathmsg->path;
 }

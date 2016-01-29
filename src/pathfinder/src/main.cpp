@@ -1,32 +1,21 @@
 #include <ros/ros.h>
-#include <geometry_msgs/PointStamped.h>
-#include <aruco_msgs/Marker.h>
-#include <aruco_msgs/MarkerArray.h>
-#include <map>
-#include <vector>
-
+#include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/PoseWithCovarianceStamped.h>
+#include <nav_msgs/GetPlan.h>
 #include <pathfinder/Path.h>
-#include <obstacle_detection/Obstacle.h>
-#include <obstacle_detection/ObstacleArray.h>
+#include <tf/transform_datatypes.h>
+#include <tf/transform_listener.h>
 
-#include "Pathfinder.h"
+#include "TargetDetermination.h"
+#include "Planner.h"
 
 
-std::vector<geometry_msgs::PointStamped> marker_positions(8);
+geometry_msgs::PoseStamped current_pose;
 
-void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array)
+void positionCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr& pose)
 {
-  std::vector<aruco_msgs::Marker> markers = marker_array->markers;
-
-  for (aruco_msgs::Marker &marker : markers)
-  {
-    geometry_msgs::PointStamped point;
-
-    point.header.stamp = ros::Time::now();
-    point.point = marker.pose.pose.position;
-
-    marker_positions[marker.id] = point;
-  }
+  current_pose.header = pose->header;
+  current_pose.pose = pose->pose.pose;
 }
 
 int main(int argc, char** argv)
@@ -37,47 +26,55 @@ int main(int argc, char** argv)
 
   // Start ROS
   ros::start();
-  ROS_INFO_STREAM("Startup!");
 
-  // Subcribe to AruCo markers
-  ros::Subscriber markers_sub = node.subscribe("/aruco_marker_publisher/markers", 1, &markersCallback);
+  // Periodically update own position
+  //ros::Timer timer = node.createTimer(ros::Duration(0.1), &positionUpdate);
+  ros::Subscriber pose_subscriber = node.subscribe("/amcl_pose", 1, &positionCallback);
 
-  // Publisher for available paths
+  // Wait for first position update
+  while (ros::ok() && current_pose.header.stamp.sec == 0)
+  {
+    ros::spinOnce();
+    ros::Duration(0.1).sleep();
+  }
+
+  // Advertise paths topic
   ros::Publisher path_pub = node.advertise<pathfinder::Path>("/paths", 10);
 
-  // Constantly determine paths to all known AruCo codes
-  ros::Rate loop_rate(1.0);
+  // Setup target determination
+  TargetDetermination td;
+  std::map<unsigned int, geometry_msgs::PoseStamped> goals;
+
+  // Setup path planner
+  Planner p;
 
 
-  Pathfinder pathfinder;
+  ROS_INFO("Startup finished!");
+
+  // Loop
+  ros::Rate loop_rate(0.5);
 
   while (ros::ok())
   {
-    unsigned int counter = 0;
+    // Get position of all aruco markers
+    goals = td.getGoals();
 
-    for (auto destination = marker_positions.begin(); destination != marker_positions.end() ; ++destination, ++counter)
+    // Calculate path for each single goal
+    for (const auto &goal : goals)
     {
-      // Check if AruCo code is even available
-      if (destination->header.stamp.sec == 0)
-      {
-        continue;
-      }
+      // Calc path
+      nav_msgs::Path path = p.makePlan(current_pose, goal.second);
 
-      // Check if information is good or outdated
-      ros::Duration age = ros::Time::now() - destination->header.stamp;
+      // Debug
+      p.debug_broadcast_tf(goal.first, path);
 
-      if (age.sec > 4)
-      {
-        // Delete outdated information
-        marker_positions.erase(marker_positions.begin() + counter);
+      // Publish path
+      pathfinder::Path msg;
 
-        continue;
-      }
+      msg.destination_id = goal.first;
+      msg.path = path;
 
-      // Calculate waypoints on path
-      pathfinder::Path path;
-
-      path_pub.publish(path);
+      path_pub.publish(msg);
     }
 
     ros::spinOnce();

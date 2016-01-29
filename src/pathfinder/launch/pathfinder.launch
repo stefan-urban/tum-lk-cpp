@@ -1,4 +1,4 @@
 <launch>
+  <include file="$(find pathfinder)/launch/move_base.launch" />
   <node name="pathfinder" pkg="pathfinder" type="pathfinder" output="screen" />
-  <node name="driver" pkg="driver" type="driver" output="screen" />
 </launch>

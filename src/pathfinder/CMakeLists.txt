@@ -14,7 +14,6 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   nav_msgs
   aruco_msgs
-  obstacle_detection
 )
 
 # Messages files
@@ -35,6 +34,6 @@ catkin_package(
 include_directories(${catkin_INCLUDE_DIRS})
 
 # Pathfinder node
-add_executable(pathfinder src/main.cpp src/Pathfinder.cpp)
+add_executable(pathfinder src/main.cpp src/TargetDetermination.cpp src/Planner.cpp)
 add_dependencies(pathfinder ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(pathfinder ${catkin_LIBRARIES} )
