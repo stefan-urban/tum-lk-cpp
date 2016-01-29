@@ -33,10 +33,10 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
 
     // Move goal to place in front of marker
     tf::Transform trans;
-    trans.setOrigin( tf::Vector3(goal_distance_from_marker, 0.0, 0.0) );
-    trans.setRotation( tf::Quaternion() );
+    trans.setOrigin( tf::Vector3(0.0, goal_distance_from_marker, 0.0) );
+    trans.setRotation( tf::Quaternion(1.0, 0.0, 0.0, 0.0) );
 
-    tf_pose *= trans;
+    tf_pose = tf_pose * trans;
 
     // Convert back to msg pose
     tf::poseTFToMsg(tf_pose, msg_pose);

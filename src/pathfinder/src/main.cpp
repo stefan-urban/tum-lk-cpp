@@ -48,8 +48,11 @@ int main(int argc, char** argv)
   // Setup path planner
   Planner p;
 
+
+  ROS_INFO("Startup finished!");
+
   // Loop
-  ros::Rate loop_rate(1.0);
+  ros::Rate loop_rate(0.5);
 
   while (ros::ok())
   {
