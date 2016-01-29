@@ -29,6 +29,14 @@ void TurtleBot::move(float linear_speed, float angular_speed)
   move(twist);
 }
 
+float TurtleBot::getTurnAngle(geometry_msgs::Point targetLocation)
+{
+  float targetAngle = atan2(current_position.x - targetLocation.x,
+                            current_position.y - targetLocation.y);
+
+  return targetAngle - current_rotation;                          
+}
+
 void TurtleBot::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
 {
   tf::Transform transform;

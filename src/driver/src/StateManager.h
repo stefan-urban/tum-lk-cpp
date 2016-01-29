@@ -16,6 +16,7 @@ class StateManager
 {
 public:
   StateManager();
+  ~StateMaanger();
 
   /**
    * Switch to a new state. For the last active state, pause() will be called.
@@ -37,7 +38,7 @@ public:
    * Stops all states and activates idle mode. For every state on the stack,
    * stop() will be called.
    */
-  void clear_states();
+  void clear_states(bool pushIdleState = true);
 
   /**
    * Update the logic of the FSM and calls tick() for the currently active
@@ -53,5 +54,7 @@ public:
 
 private:
   std::vector<std::shared_ptr<State>> states;
+
+  std::shaerd_ptr<TurtleBot> turtleBot;
 
 };

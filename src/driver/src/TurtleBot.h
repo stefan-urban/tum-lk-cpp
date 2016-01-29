@@ -48,6 +48,13 @@ public:
    */
   geometry_msgs::Vector3 getPosition();
 
+
+  /**
+   + Returns the angle the turtle bot has to turn in order to face the target
+   * location.
+   */
+  float getTurnAngle(geometry_msgs::Point targetLocation);
+
 private:
   // ...
   ros::NodeHandle node;
