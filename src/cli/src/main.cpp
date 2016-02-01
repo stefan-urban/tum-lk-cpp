@@ -3,6 +3,7 @@
 
 #include "CommandLine.h"
 #include "CmdGetPos.h"
+#include "CmdSetGoalId.h"
 
 int main(int argc, char** argv)
 {
@@ -17,6 +18,7 @@ int main(int argc, char** argv)
   CommandLine cmd_line;
 
   cmd_line.registerCmd((Cmd*) new CmdGetPos());
+  cmd_line.registerCmd((Cmd*) new CmdSetGoalId());
 
   // Start thread for command input
   std::thread cmd_input(&CommandLine::start, &cmd_line);

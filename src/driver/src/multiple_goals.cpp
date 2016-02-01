@@ -14,6 +14,7 @@
 #include <nav_msgs/Odometry.h>
 #include <tf/tf.h>
 #include <kobuki_msgs/Sound.h>
+#include <std_msgs/Int32.h>
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
@@ -67,6 +68,13 @@ void statusCallback(const actionlib_msgs::GoalStatusArrayConstPtr& status)
   current_goal_status = status->status_list.back().status;
 }
 
+unsigned int destination_id;
+
+void cliGoalSetCallback(const std_msgs::Int32& goalId)
+{
+  destination_id = goalId.data;
+}
+
 int main(int argc, char** argv)
 {
   // Init
@@ -79,6 +87,7 @@ int main(int argc, char** argv)
   // Subscribe to paths
   ros::Subscriber goals_sub = node.subscribe("/goals", 1000, &goalsCallback);
   ros::Subscriber pose_sub = node.subscribe("/acml_pose", 1000, &poseCallback);
+  ros::Subscriber cli_goal_id_sub = node.subscribe("/acml_pose", 1000, &cliGoalSetCallback);
 
   // Publish velocity command for rotation
   std::string cmd_vel_topic_name;
@@ -100,9 +109,13 @@ int main(int argc, char** argv)
 
   ros::Publisher sound_pub = node.advertise<kobuki_msgs::Sound>(sound_topic_name.c_str(), 10);
 
+  kobuki_msgs::Sound sound_msg;
+  sound_msg.value = 0;
+
+
 
   // Just loop through all destination ids
-  for (unsigned int destination_id = 0; destination_id < 8; destination_id++)
+  for (destination_id = 0; destination_id < 8; destination_id++)
   {
     ROS_INFO_STREAM("Find id " << destination_id << " now!");
 
@@ -162,6 +175,7 @@ int main(int argc, char** argv)
 
 
     ROS_INFO_STREAM("Now at goal #" << destination_id);
+    sound_pub.publish(sound_msg);
   }
 
   // Good bye turtlebot
