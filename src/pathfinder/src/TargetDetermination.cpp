@@ -47,15 +47,15 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
     pos.setZ(0.0);
     tf_pose.setOrigin( pos );
 
+    // Find yaw rate facing to marker
+    float dx = marker.pose.pose.position.x - tf_pose.getOrigin().getX();
+    float dy = marker.pose.pose.position.y - tf_pose.getOrigin().getY();
+
+    float yaw = std::atan2(dy, dx);
+
     // Set rotation to face marker
     tf::Quaternion quad = tf_pose.getRotation();
-
-    double roll, pitch, yaw;
-    tf::Matrix3x3(quad).getRPY(roll, pitch, yaw);
-
-    //quad.setRPY(0.0, 0.0, roll);
-    quad.setRPY(0.0, 0.0, 0.0);
-
+    quad.setRPY(0.0, 0.0, yaw);
     tf_pose.setRotation( quad );
 
     // Convert back to msg pose
@@ -69,8 +69,7 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
     // And save
     goals_[marker.id] = msg_posestamped;
 
-    ROS_INFO_STREAM("Send goal. " << msg_posestamped.pose.orientation.x << " - " << msg_posestamped.pose.orientation.y << " - " << msg_posestamped.pose.orientation.z << " - " << msg_posestamped.pose.orientation.w);
-
+    ROS_INFO_STREAM("Send goal.");
   }
 }
 
