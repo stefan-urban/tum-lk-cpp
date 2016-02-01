@@ -13,6 +13,7 @@
 #include <cmath>
 #include <nav_msgs/Odometry.h>
 #include <tf/tf.h>
+#include <kobuki_msgs/Sound.h>
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
@@ -74,23 +75,36 @@ int main(int argc, char** argv)
 
   // Start ROS
   ros::start();
-  ROS_INFO_STREAM("Startup!");
 
   // Subscribe to paths
   ros::Subscriber goals_sub = node.subscribe("/goals", 1000, &goalsCallback);
-  //  ros::Subscriber pose_sub = node.subscribe("/odom", 1000, &poseCallback);
   ros::Subscriber pose_sub = node.subscribe("/acml_pose", 1000, &poseCallback);
-  ros::Subscriber status_sub = node.subscribe("/move_base/status", 1000, &statusCallback);
 
-  // For rotation
-  ros::Publisher search_pub = node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 10);
+  // Publish velocity command for rotation
+  std::string cmd_vel_topic_name;
 
-  // Simple goal ublisher
-  ros::Publisher simple_goal_pub = node.advertise<geometry_msgs::PoseStamped>("/move_base_simple/goal", 10);
+  if (!node.getParam("rotation_cmd_vel_command", cmd_vel_topic_name))
+  {
+    cmd_vel_topic_name = "/mobile_base/commands/velocity";
+  }
 
+  ros::Publisher search_pub = node.advertise<geometry_msgs::Twist>(cmd_vel_topic_name.c_str(), 10);
+
+  // Publisher for kobuki sound commands
+  std::string sound_topic_name;
+
+  if (!node.getParam("sound_command", sound_topic_name))
+  {
+    sound_topic_name = "/mobile_base/commands/sound";
+  }
+
+  ros::Publisher sound_pub = node.advertise<kobuki_msgs::Sound>(sound_topic_name.c_str(), 10);
+
+
+  // Just loop through all destination ids
   for (unsigned int destination_id = 0; destination_id < 8; destination_id++)
   {
-    ROS_INFO_STREAM("Find id " << destination_id);
+    ROS_INFO_STREAM("Find id " << destination_id << " now!");
 
     geometry_msgs::PoseStamped current_goal;
 
@@ -103,79 +117,51 @@ int main(int argc, char** argv)
 
       search_pub.publish(rotate_cmd);
 
-      ROS_INFO("Wait for goal");
+      ROS_INFO("Wait for goal, rotating.");
       ros::spinOnce();
       wait_rate.sleep();
     }
 
+    // If Strg+C was pressed
     if (!ros::ok())
     {
       return 0;
     }
 
-    // Stop Robot
+    // Make sure robot has stopped
     search_pub.publish(geometry_msgs::Twist());
-
-/*
-    float distance;
-    ros::Rate travel_rate(0.2);
-
-    auto start_time = ros::Time::now();
-    ros::Duration duration;
-
-    do {
-      // Update Goal
-      getGoal(destination_id, current_goal);
-
-      simple_goal_pub.publish(current_goal);
-      distance = std::hypot(current_goal.pose.position.x - current_pose.position.x, current_goal.pose.position.y - current_pose.position.y);
-
-      ROS_INFO_STREAM(destination_id << " - status " << current_goal_status << " distance " << distance << " to: " << current_goal.pose.position.x << "-" << current_goal.pose.position.y);
-
-      ros::spinOnce();
-      travel_rate.sleep();
-
-      duration = ros::Time::now() - start_time;
-    }
-    while((ros::ok() && current_goal_status != 3) || ((ros::ok() && duration.toSec() < 5)));
-
-    current_goal_status = 0;
-*/
-
 
     // Setup action client
     MoveBaseClient ac("move_base", true);
 
-    while(!ac.waitForServer(ros::Duration(5.0))){
+    while(!ac.waitForServer(ros::Duration(5.0)))
+    {
       ROS_INFO("Waiting for the move_base action server to come up");
     }
 
     move_base_msgs::MoveBaseGoal goal;
-    float distance;
+    bool finished_before_timeout;
 
-    ac.sendGoal(goal);
-
-    ros::Rate travel_rate(20.0);
     do {
       // Update Goal
       getGoal(destination_id, current_goal);
 
-      distance = std::hypot(current_goal.pose.position.x - current_pose.position.x, current_goal.pose.position.y - current_pose.position.y);
-
       // Send updated goal position
       goal.target_pose = current_goal;
 
-      ROS_INFO("Send goal. Status: ");
+      ROS_INFO("Send goal.");
+      ac.sendGoal(goal);
+
+      // Wait 2 seconds and check if we succeeded
+      finished_before_timeout = ac.waitForResult(ros::Duration(2.0));
 
       ros::spinOnce();
-      travel_rate.sleep();
 
     } while(ac.getState() != actionlib::SimpleClientGoalState::SUCCEEDED);
 
 
 
-    ROS_INFO_STREAM("at " << destination_id);
-
+    ROS_INFO_STREAM("Now at goal #" << destination_id);
   }
 
   // Good bye turtlebot

@@ -77,6 +77,8 @@ int main(int argc, char** argv)
 
     td.broadcastTf();
 
+    /*
+
     // Paths
     for (const auto& goal : goals)
     {
@@ -95,8 +97,13 @@ int main(int argc, char** argv)
       path_pub.publish(msg);
     }
 
+    */
+
+
     ros::spinOnce();
     loop_rate.sleep();
+
+
   }
 
   // Good bye turtlebot
