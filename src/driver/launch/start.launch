@@ -1,8 +1,8 @@
 <launch>
-  <!--node pkg="driver" type="multiple_goals" name="driver" output="screen">
+  <node pkg="driver" type="multiple_goals" name="driver" output="screen">
     <param name="rotation_cmd_vel_command" value="/mobile_base/commands/velocity" />
-      <param name="sound_command" value="/mobile_base/commands/sound" />
-  </node -->
+    <param name="sound_command" value="/mobile_base/commands/sound" />
+  </node>
 
   <node pkg="nodelet" type="nodelet" name="kobuki_safety_controller" args="load kobuki_safety_controller/SafetyControllerNodelet mobile_base_nodelet_manager">
     <remap from="kobuki_safety_controller/cmd_vel" to="/cmd_vel_mux/input/safety_controller"/>

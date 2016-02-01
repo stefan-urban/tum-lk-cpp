@@ -8,6 +8,13 @@
 TargetDetermination::TargetDetermination()
 {
   markers_sub = node.subscribe(markers_topic.c_str(), 1, &TargetDetermination::markersCallback, this);
+
+  // Try to get parameters
+  if (!node.getParam("goal_distance_from_marker", goal_distance_from_marker))
+  {
+    goal_distance_from_marker = 0.3;
+  }
+
 }
 
 std::map<unsigned int, geometry_msgs::PoseStamped> TargetDetermination::getGoals()
