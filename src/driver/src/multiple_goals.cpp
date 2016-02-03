@@ -87,7 +87,7 @@ int main(int argc, char** argv)
   // Subscribe to paths
   ros::Subscriber goals_sub = node.subscribe("/goals", 1000, &goalsCallback);
   ros::Subscriber pose_sub = node.subscribe("/acml_pose", 1000, &poseCallback);
-  ros::Subscriber cli_goal_id_sub = node.subscribe("/acml_pose", 1000, &cliGoalSetCallback);
+  ros::Subscriber cli_goal_id_sub = node.subscribe("/cli/goals/set_id", 1000, &cliGoalSetCallback);
 
   // Publish velocity command for rotation
   std::string cmd_vel_topic_name;
