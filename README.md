@@ -90,11 +90,11 @@ roslaunch goalfinder goalfinder.launch
 roslaunch goalfinder rviz_goals.launch
 ```
 
-## 4. Set initial position
+### 4. Set initial position
 
 The topic ```/initialpose``` helps AMCL to determine the current position of the robot at startup. This can be set with the **2D Pose Estimate** function of RVIZ.
 
-## 5. Start driving
+### 5. Start driving
 
 ```
 On robot:
