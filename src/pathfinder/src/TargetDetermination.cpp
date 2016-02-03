@@ -8,6 +8,13 @@
 TargetDetermination::TargetDetermination()
 {
   markers_sub = node.subscribe(markers_topic.c_str(), 1, &TargetDetermination::markersCallback, this);
+
+  // Try to get parameters
+  if (!node.getParam("goal_distance_from_marker", goal_distance_from_marker))
+  {
+    goal_distance_from_marker = 0.3;
+  }
+
 }
 
 std::map<unsigned int, geometry_msgs::PoseStamped> TargetDetermination::getGoals()
@@ -24,34 +31,32 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
     // Create pose
     geometry_msgs::Pose msg_pose = marker.pose.pose;
 
-    // We only do 2D, so omit z coordinate
-    msg_pose.position.z = 0;
-
     // Convert to TF
     tf::Pose tf_pose;
     tf::poseMsgToTF(msg_pose, tf_pose);
 
-    tf_pose.setRotation(tf::createQuaternionFromRPY(0.0, 0.0, 0.0));
+    // Translation alongside y
+    tf::Transform trans;
+    trans.setOrigin(tf::Vector3(0.0 , goal_distance_from_marker, 0.0));
+    trans.setRotation( tf::createQuaternionFromRPY(0.0, 0.0, 0.0) );
 
-    // First Rotation around y
-    tf::Transform trans1;
-    auto rot1 = tf::Quaternion();
-    rot1.setRPY(0.0, M_PI/2, 0.0);
-    trans1.setRotation(rot1);
+    tf_pose = tf_pose * trans;
 
-    // Second rotation around z
-    tf::Transform trans2;
-    auto rot2 = tf::Quaternion();
-    rot2.setRPY(0.0, 0.0, -1 * M_PI/2);
-    trans2.setRotation(rot2);
+    // Set height to zero
+    tf::Vector3 pos = tf_pose.getOrigin();
+    pos.setZ(0.0);
+    tf_pose.setOrigin( pos );
 
-    // Translation alongside x
-    tf::Transform trans3;
-    trans3.setOrigin(tf::Vector3(-1 * goal_distance_from_marker, 0.0, 0.0));
-    trans3.setRotation( tf::createQuaternionFromRPY(0.0, 0.0, 0.0) );
+    // Find yaw rate facing to marker
+    float dx = marker.pose.pose.position.x - tf_pose.getOrigin().getX();
+    float dy = marker.pose.pose.position.y - tf_pose.getOrigin().getY();
 
-    // Apply transformations
-    tf_pose = tf_pose * trans1 * trans2 * trans3;
+    float yaw = std::atan2(dy, dx);
+
+    // Set rotation to face marker
+    tf::Quaternion quad = tf_pose.getRotation();
+    quad.setRPY(0.0, 0.0, yaw);
+    tf_pose.setRotation( quad );
 
     // Convert back to msg pose
     tf::poseTFToMsg(tf_pose, msg_pose);
@@ -63,6 +68,8 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
 
     // And save
     goals_[marker.id] = msg_posestamped;
+
+    ROS_INFO_STREAM("Send goal.");
   }
 }
 

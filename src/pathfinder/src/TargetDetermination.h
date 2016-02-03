@@ -14,10 +14,9 @@ class TargetDetermination
 {
 public:
   const std::string markers_topic = "/aruco_marker/markers";
-  const float goal_distance_from_marker = 0.3;
 
-    void broadcastTf();
-    
+  void broadcastTf();
+
   /**
    * Constructor: Subscribes to aruco topic
    */
@@ -39,5 +38,8 @@ private:
 
   ros::Subscriber markers_sub;
   void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array);
+
+  float goal_distance_from_marker;
+
 
 };
