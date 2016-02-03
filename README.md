@@ -1,60 +1,94 @@
-TurtleBot Aruco Code Follower
+TurtleBot Aruco Marker Driver
 =============================
 
-## Referenzen
+## Available nodes
 
-Folgende Pakete wurden verwendet:
+### Node ```goalfinder```
 
-- [RPLIDAR driver wrapper](https://github.com/robopeak/rplidar_ros)
-- [Aruco library wrapper](https://github.com/pal-robotics/aruco_ros)
+Starts camera and aruco marker detection. Provides the position of all found markers and the generated goals.
 
+##### Parameter:
+- ```goal_distance_from_marker``` (in meters): <br>
+  The robot is not moving directly to the position of the marker but before it. ...
 
-## Anleitung:
+##### Launch files:
+- ```slam.launch```: <br>
+  Starts up Kobuki mobile_base, laser scanner and the gmapping tools. It will try to create a precise map of the room with the available distance information. Tip: Move robot around with teleoperation programs.
 
-## Anleitung für SLAM
+- ```rviz_slam.launch```: <br>
+  Launches a predefined setting for RVIZ suitable for monitoring the SLAM progress.
 
-#### Auf Roboter:
+- ```goalfinder```: <br>
+  After the map of the room is available, the goalfinder will start up AMCL, the camera and the Aruco code detection. Poses in front of the markers that directly face it will be published.
+
+- ```rviz_goals.launch```: <br>
+  Launches a predefined setting for RVIZ suitable for examination of the goals' position.
+
+### Node **driver**
+
+description
+
+##### Parameters:
+
+...
+
+##### Launch files:
+
+...
+
+## Usage
+
+### 1. SLAM (map generation)
 
 ```
+On robot:
 roscore
 roslaunch goalfinder slam.launch
-```
 
-Mit den Teleop-Funktionen kann der Roboter nun bewegt werden, um eine Karte zu generieren.
-
-#### Auf PC (nur für Visualisierung):
-
-```
+# On PC:
 roslaunch goalfinder rviz_slam.launch
 ```
 
-#### Karte speichern
-Die Karte muss im Anschluss noch in der ```goalfinder/launch/\_amcl.launch``` eingebunden werden.
+After generation the new map, you need to save it using the following command:
+
 ```
 rosrun map_server map_saver -f mymap
 ```
 
-## Anleitung für Follower Mode
+### 2. Make AMCL use the new generated map
 
-#### Auf Roboter:
+Change the path to the map in ```goalfinder/launch/_amcl.launch```. The parameter is called: ```map_file```.
+
+### 3. Consecutive visits at markers 0-7
 
 ```
+On robot:
 roscore
 roslaunch goalfinder goalfinder.launch
-```
 
-#### Auf PC:
-
-```
+# On PC:
 roslaunch goalfinder rviz_goals.launch
 ```
+
+##### Notes
+
+- The robot should beep when reaching a marker.
+- Simple obstacles can be avoided. They have to be detectable by the laser scanner, meaning not too narrow or small.
 
 ## Todo
 
 - Marker in rviz mit textur darstellen, damit TF debug entfernt werden kann
 - Path.msg entfernen
+- Recovery Behaviour
 
-## Lizenz
+## References
+
+These ready-to-use packages where used:
+
+- [RPLIDAR driver wrapper](https://github.com/robopeak/rplidar_ros)
+- [Aruco library wrapper](https://github.com/pal-robotics/aruco_ros)
+
+## License
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
