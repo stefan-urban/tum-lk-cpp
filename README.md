@@ -1,10 +1,15 @@
 TurtleBot Aruco Code Follower
 =============================
 
-## Verwendung von folgenenden fertigen Paketen:
+## Referenzen
+
+Folgende Pakete wurden verwendet:
 
 - [RPLIDAR driver wrapper](https://github.com/robopeak/rplidar_ros)
 - [Aruco library wrapper](https://github.com/pal-robotics/aruco_ros)
+
+
+## Anleitung:
 
 ## Anleitung für SLAM
 
@@ -12,8 +17,7 @@ TurtleBot Aruco Code Follower
 
 ```
 roscore
-roslaunch turtlebot_bringup minimal.launch
-roslaunch pathfinder slam.launch
+roslaunch goalfinder slam.launch
 ```
 
 Mit den Teleop-Funktionen kann der Roboter nun bewegt werden, um eine Karte zu generieren.
@@ -21,11 +25,11 @@ Mit den Teleop-Funktionen kann der Roboter nun bewegt werden, um eine Karte zu g
 #### Auf PC (nur für Visualisierung):
 
 ```
-roslaunch turtlebot_rviz_launchers view_navigation.launch
+roslaunch goalfinder rviz_slam.launch
 ```
 
 #### Karte speichern
-Die Karte muss im Anschluss noch in der amcl.launch eingebunden werden.
+Die Karte muss im Anschluss noch in der ```goalfinder/launch/\_amcl.launch``` eingebunden werden.
 ```
 rosrun map_server map_saver -f mymap
 ```
@@ -36,17 +40,19 @@ rosrun map_server map_saver -f mymap
 
 ```
 roscore
-roslaunch turtlebot_bringup minimal.launch
-roslaunch pathfinder amcl.launch
-roslaunch aruco_ros all_markers.launch
+roslaunch goalfinder goalfinder.launch
 ```
 
 #### Auf PC:
 
 ```
-roslaunch pathfinder pathfinder.launch
-roslaunch turtlebot_rviz_launchers view_navigation.launch
+roslaunch goalfinder rviz_goals.launch
 ```
+
+## Todo
+
+- Marker in rviz mit textur darstellen, damit TF debug entfernt werden kann
+- Path.msg entfernen
 
 ## Lizenz
 

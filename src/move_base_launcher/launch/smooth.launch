@@ -1,0 +1,7 @@
+<launch>
+
+    <!-- todo -->
+
+    <!-- Include normal.launch, but map cmd_vel output to smoother input and so on -->
+
+</launch>

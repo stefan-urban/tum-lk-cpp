@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(pathfinder)
+project(goalfinder)
 
 # C++11 compiler flag
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
@@ -33,7 +33,7 @@ catkin_package(
 
 include_directories(${catkin_INCLUDE_DIRS})
 
-# Pathfinder node
-add_executable(pathfinder src/main.cpp src/TargetDetermination.cpp src/Planner.cpp)
-add_dependencies(pathfinder ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(pathfinder ${catkin_LIBRARIES} )
+# Goalfinder node
+add_executable(goalfinder src/main.cpp src/TargetDetermination.cpp)
+add_dependencies(goalfinder ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(goalfinder ${catkin_LIBRARIES} )

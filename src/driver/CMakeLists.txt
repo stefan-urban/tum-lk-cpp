@@ -12,7 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   tf
   nav_msgs
-  pathfinder
+  goalfinder # to make sure includes exist
 )
 
 # Package configuration

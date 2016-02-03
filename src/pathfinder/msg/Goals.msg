@@ -1,3 +1,3 @@
 Header header
 
-pathfinder/Goal[] list
+goalfinder/Goal[] list

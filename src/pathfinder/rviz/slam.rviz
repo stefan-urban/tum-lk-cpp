@@ -54,7 +54,7 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
-      Enabled: false
+      Enabled: true
       Links:
         All Links Enabled: true
         Expand Joint Details: false
@@ -65,10 +65,10 @@ Visualization Manager:
       Robot Description: robot_description
       TF Prefix: ""
       Update Interval: 0
-      Value: false
+      Value: true
       Visual Enabled: true
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: false
@@ -80,12 +80,12 @@ Visualization Manager:
       Tree:
         {}
       Update Interval: 0
-      Value: true
+      Value: false
     - Alpha: 1
       Buffer Length: 1
       Class: rviz/Path
       Color: 25; 255; 0
-      Enabled: true
+      Enabled: false
       Line Style: Lines
       Line Width: 0.03
       Name: Full Plan
@@ -94,7 +94,7 @@ Visualization Manager:
         Y: 0
         Z: 0
       Topic: /move_base/NavfnROS/plan
-      Value: true
+      Value: false
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
@@ -185,7 +185,7 @@ Visualization Manager:
             Z: 0
           Topic: /move_base/DWAPlannerROS/global_plan
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Global Map
     - Class: rviz/Group
       Displays:
@@ -269,7 +269,7 @@ Visualization Manager:
           Use Fixed Frame: true
           Use rainbow: false
           Value: true
-      Enabled: true
+      Enabled: false
       Name: Local Map
   Enabled: true
   Global Options:
@@ -293,23 +293,20 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/ThirdPersonFollower
-      Distance: 7.85851
+      Angle: 0
+      Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Focal Point:
-        X: -2.4593
-        Y: 1.87416
-        Z: -1.20401e-05
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.934797
+      Scale: 10
       Target Frame: <Fixed Frame>
-      Value: ThirdPersonFollower (rviz)
-      Yaw: 4.46544
+      Value: TopDownOrtho (rviz)
+      X: -3.29125
+      Y: -1.426
     Saved: ~
 Window Geometry:
   Displays:

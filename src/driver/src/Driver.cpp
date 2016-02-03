@@ -12,7 +12,7 @@ Driver::Driver()
 
 void Driver::gotoMarker(int id)
 {
-  
+
 }
 
 bool Driver::pathAvailable(int id)
@@ -74,7 +74,7 @@ geometry_msgs::Point Driver::getTargetFromPath(const std::vector<geometry_msgs::
   return dest;
 }
 
-void Driver::waypoint_callback(const pathfinder::PathConstPtr &pathmsg)
+void Driver::waypoint_callback(const goalfinder::PathConstPtr &pathmsg)
 {
   int id = pathmsg->destination_id;
   if(id > 7)
