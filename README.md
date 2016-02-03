@@ -3,40 +3,60 @@ TurtleBot Aruco Marker Driver
 
 ## Available nodes
 
-### Node ```goalfinder```
+A list of all available nodes:
 
-Starts camera and aruco marker detection. Provides the position of all found markers and the generated goals.
 
-##### Parameter:
-- ```goal_distance_from_marker``` (in meters): <br>
-  The robot is not moving directly to the position of the marker but before it. ...
+> ### **goalfinder**
 
-##### Launch files:
-- ```slam.launch```: <br>
-  Starts up Kobuki mobile_base, laser scanner and the gmapping tools. It will try to create a precise map of the room with the available distance information. Tip: Move robot around with teleoperation programs.
+>
+> Starts camera and aruco marker detection. Provides the position of all found markers and the generated goals.
+> 
+> ##### Parameter:
+> - ```goal_distance_from_marker``` (in meters) <br>  
+>   The robot is not moving directly to the position of the marker but before it. ...
+> 
+> ##### Launch files:
+> - ```slam.launch``` <br>  
+>   Starts up Kobuki mobile_base, laser scanner and the gmapping tools. It will try to create a precise map of the room with the available distance information. Tip: Move robot around with teleoperation programs.
+> 
+> - ```rviz_slam.launch``` <br>  
+>   Launches a predefined setting for RVIZ suitable for monitoring the SLAM progress.
+> 
+> - ```goalfinder``` <br>  
+>   After the map of the room is available, the goalfinder will start up AMCL, the camera and the Aruco code detection. Poses in front of the markers that directly face it will be published.
+> 
+> - ```rviz_goals.launch``` <br>  
+>   Launches a predefined setting for RVIZ suitable for examination of the goals' position.
+>
+> -----------------------------
+> ### **driver**
+> 
+> description
+> 
+> ##### Parameters:
+> 
+> ...
+> 
+> ##### Launch files:
+> 
+> ...
+> 
 
-- ```rviz_slam.launch```: <br>
-  Launches a predefined setting for RVIZ suitable for monitoring the SLAM progress.
 
-- ```goalfinder```: <br>
-  After the map of the room is available, the goalfinder will start up AMCL, the camera and the Aruco code detection. Poses in front of the markers that directly face it will be published.
-
-- ```rviz_goals.launch```: <br>
-  Launches a predefined setting for RVIZ suitable for examination of the goals' position.
-
-### Node **driver**
-
-description
-
-##### Parameters:
-
-...
-
-##### Launch files:
-
-...
 
 ## Usage
+
+Before getting started make sure the environment variables are correctly set. An example would be:
+```
+source /opt/ros/indigo/setup.bash
+
+export ROS_PACKAGE_PATH=/home/username/repo:$ROS_PACKAGE_PATH 
+export ROS_WORKSPACE=/home/username/repo
+
+export ROS_MASTER_URI=http://herz-dame.clients.eikon.tum.de:11311
+export ROS_HOSTNAME=`hostname`.clients.eikon.tum.de
+```
+
 
 ### 1. SLAM (map generation)
 
