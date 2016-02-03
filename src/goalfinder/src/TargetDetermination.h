@@ -15,10 +15,11 @@ class TargetDetermination
 public:
   const std::string markers_topic = "/aruco_marker/markers";
 
+  // debug
   void broadcastTf();
 
   /**
-   * Constructor: Subscribes to aruco topic
+   * Constructor: Subscribes to aruco topic and sets up parameters
    */
   TargetDetermination();
 
@@ -26,11 +27,6 @@ public:
    * Provides a list of all available goals
    */
   std::map<unsigned int, geometry_msgs::PoseStamped> getGoals();
-
-  /**
-   * Get a vector of goals
-   */
-  std::vector<geometry_msgs::PoseStamped> getGoalsVec();
 
 private:
   ros::NodeHandle node;

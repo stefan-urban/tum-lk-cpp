@@ -14,7 +14,6 @@ TargetDetermination::TargetDetermination()
   {
     goal_distance_from_marker = 0.3;
   }
-
 }
 
 std::map<unsigned int, geometry_msgs::PoseStamped> TargetDetermination::getGoals()
@@ -54,7 +53,7 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
     float yaw = std::atan2(dy, dx);
 
     // Set rotation to face marker
-    tf::Quaternion quad = tf_pose.getRotation();
+    tf::Quaternion quad = tf_pose.getRotation(); // @todo
     quad.setRPY(0.0, 0.0, yaw);
     tf_pose.setRotation( quad );
 
@@ -68,8 +67,6 @@ void TargetDetermination::markersCallback(const aruco_msgs::MarkerArrayConstPtr&
 
     // And save
     goals_[marker.id] = msg_posestamped;
-
-    ROS_INFO_STREAM("Send goal.");
   }
 }
 
@@ -85,7 +82,5 @@ void TargetDetermination::broadcastTf()
     br.sendTransform(tf::StampedTransform(tf_pose, ros::Time::now(), "map", "goal_" + std::to_string(goal.first)));
 
     ROS_INFO_STREAM("goal " << goal.first << " output");
-
   }
-
 }

@@ -19,7 +19,7 @@
         <param name="camera_frame"       value="$(arg cam_frame)"/>
     </node>
 
-    <!-- Broadcast topic poses on TF -->
+    <!-- Broadcast topic poses on TF (debug, not needed!) -->
     <node name="aruco_tf_broadcaster" pkg="aruco_tf_broadcaster" type="broadcaster" />
 
 </launch>

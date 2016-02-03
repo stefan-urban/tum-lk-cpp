@@ -70,6 +70,17 @@ roslaunch goalfinder goalfinder.launch
 roslaunch goalfinder rviz_goals.launch
 ```
 
+## 4. Set initial position
+
+The topic ```/initialpose``` helps AMCL to determine the current position of the robot at startup. This can be set with the **2D Pose Estimate** function of RVIZ.
+
+## 5. Start driving
+
+```
+On robot:
+roslaunch driver xyz.launch
+```
+
 ##### Notes
 
 - The robot should beep when reaching a marker.
@@ -80,6 +91,8 @@ roslaunch goalfinder rviz_goals.launch
 - Marker in rviz mit textur darstellen, damit TF debug entfernt werden kann
 - Path.msg entfernen
 - Recovery Behaviour
+- CLI should use services if possible > response!
+- try to disable as much as possible from camera setup (like depth, if we do not use it!)
 
 ## References
 

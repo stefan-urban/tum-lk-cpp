@@ -11,9 +11,9 @@ set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   tf
+  aruco_msgs
   std_msgs
   nav_msgs
-  aruco_msgs
 )
 
 # Messages files
