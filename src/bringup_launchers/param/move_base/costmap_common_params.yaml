@@ -42,7 +42,7 @@ obstacle_layer:
     topic: camera/depth/points
     marking: true
     clearing: true
-    min_obstacle_height: 0.0
+    min_obstacle_height: 0.3 # otherwise ground floor will be identified as obstacle
     max_obstacle_height: 0.5
   # for debugging only, let's you see the entire voxel grid
 

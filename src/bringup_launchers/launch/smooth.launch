@@ -1,11 +1,9 @@
 <launch>
 
-  <!-- todo: test this -->
-
   <!-- Velocity smoother -->
   <arg name="node_name"             default="velocity_smoother"/>
-  <arg name="nodelet_manager_name"  default="nodelet_manager"/>
-  <arg name="config_file"           default="$(find move_base_launcher)/param/velocity_smoother/config.yaml"/>
+  <arg name="nodelet_manager_name"  default="mobile_base_nodelet_manager"/>
+  <arg name="config_file"           default="$(find bringup_launchers)/param/velocity_smoother/config.yaml"/>
   <arg name="raw_cmd_vel_topic"     default="raw_cmd_vel"/>
   <arg name="smooth_cmd_vel_topic"  default="/cmd_vel_mux/input/navi"/>
   <arg name="robot_cmd_vel_topic"   default="/mobile_base/commands/velocity"/>
@@ -24,8 +22,8 @@
   </node>
 
   <!-- Normal move_base startup, just with velocity command output mapped to smoother -->
-  <include file="$(find move_base_launcher)/launch/normal.launch">
-    <arg name="cmd_vel_topic" default="$(arg raw_cmd_vel_topic)" />
+  <include file="$(find bringup_launchers)/launch/normal.launch">
+    <arg name="cmd_vel_topic" value="$(arg raw_cmd_vel_topic)" />
   </include>
 
 
