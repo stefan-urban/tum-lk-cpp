@@ -170,8 +170,14 @@ int main(int argc, char** argv)
 
       ros::spinOnce();
 
-    } while(ac.getState() != actionlib::SimpleClientGoalState::SUCCEEDED);
+    } while(ros::ok() && ac.getState() != actionlib::SimpleClientGoalState::SUCCEEDED);
 
+
+    // If Strg+C was pressed
+    if (!ros::ok())
+    {
+      return 0;
+    }
 
 
     ROS_INFO_STREAM("Now at goal #" << destination_id);
