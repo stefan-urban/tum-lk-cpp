@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>bringup_launcher</name>
+  <name>bringup_launchers</name>
   <version>1.0.0</version>
   <description>Central folder for files needed to start move base and other basic operations properly.</description>
 

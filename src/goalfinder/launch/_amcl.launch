@@ -13,6 +13,9 @@
   <arg name="initial_pose_y" default="0.0"/>
   <arg name="initial_pose_a" default="0.0"/>
 
+  <param name="use_map_topic" value="true"/>
+  <param name="amcl/laser_max_range" value="6.0" /> <!-- Source: http://www.robotshop.com/media/files/pdf/datasheet-rplidar.pdf - Page 6 -->
+
   <include file="$(find turtlebot_navigation)/launch/includes/amcl.launch.xml">
     <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
     <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>

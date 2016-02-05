@@ -2,7 +2,7 @@
 
 TurtleBot::TurtleBot()
 {
-  velcmd_publisher = node.advertise<geometry_msgs::Twist>("/mobile_base/commands/velocity", 10);
+  velcmd_publisher = node.advertise<geometry_msgs::Twist>("/cmd_vel_mux/input/driver", 10);
 
   pose_subscriber = node.subscribe("/odom", 1, &TurtleBot::poseCallback, this);
   //bumper_subscriber = node.subscribe<turtlebot_node::TurtlebotSensorState>("/turtlebot_node/sensor_state", 1000, &TurtleBot::bumperCallback, this);
@@ -38,7 +38,7 @@ float TurtleBot::getTurnAngle(geometry_msgs::Point targetLocation)
   float targetAngle = atan2(current_position.x - targetLocation.x,
                             current_position.y - targetLocation.y);
 
-  return targetAngle - current_rotation;                          
+  return targetAngle - current_rotation;
 }
 
 geometry_msgs::Point TurtleBot::getPosition()

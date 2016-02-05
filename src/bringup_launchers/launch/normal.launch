@@ -1,25 +1,26 @@
 <launch>
   <!-- Mobile Base - provides all Kobuki functions -->
   <include file="$(find turtlebot_bringup)/launch/minimal.launch" />
+  <param name="cmd_vel_mux/yaml_cfg_file" value="$(find bringup_launchers)/param/velocity_muxer/mux.yaml"/>
 
-  <!-- MoveBase - used for path planning -->
+  <!-- MoveBase - used for path following -->
   <arg name="odom_frame_id"   default="odom"/>
   <arg name="base_frame_id"   default="base_footprint"/>
   <arg name="global_frame_id" default="map"/>
   <arg name="odom_topic" default="odom" />
   <arg name="laser_topic" default="scan" />
   <arg name="cmd_vel_topic" default="/cmd_vel_mux/input/navi" />
-  <arg name="custom_param_file" default="$(find goalfinder)/param/move_base/dummy.yaml"/>
+  <arg name="custom_param_file" default="$(find bringup_launchers)/param/move_base/dummy.yaml"/>
 
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
-    <rosparam file="$(find goalfinder)/param/move_base/costmap_common_params.yaml" command="load" ns="global_costmap" />
-    <rosparam file="$(find goalfinder)/param/move_base/costmap_common_params.yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find goalfinder)/param/move_base/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find goalfinder)/param/move_base/global_costmap_params.yaml" command="load" />
-    <rosparam file="$(find goalfinder)/param/move_base/dwa_local_planner_params.yaml" command="load" />
-    <rosparam file="$(find goalfinder)/param/move_base/move_base_params.yaml" command="load" />
-    <rosparam file="$(find goalfinder)/param/move_base/global_planner_params.yaml" command="load" />
-    <rosparam file="$(find goalfinder)/param/move_base/navfn_global_planner_params.yaml" command="load" />
+    <rosparam file="$(find bringup_launchers)/param/move_base/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find bringup_launchers)/param/move_base/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find bringup_launchers)/param/move_base/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find bringup_launchers)/param/move_base/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find bringup_launchers)/param/move_base/dwa_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find bringup_launchers)/param/move_base/move_base_params.yaml" command="load" />
+    <rosparam file="$(find bringup_launchers)/param/move_base/global_planner_params.yaml" command="load" />
+    <rosparam file="$(find bringup_launchers)/param/move_base/navfn_global_planner_params.yaml" command="load" />
     <!-- external params file that could be loaded into the move_base namespace -->
     <rosparam file="$(arg custom_param_file)" command="load" />
 
@@ -34,5 +35,7 @@
     <remap from="odom" to="$(arg odom_topic)"/>
     <remap from="scan" to="$(arg laser_topic)"/>
   </node>
+
+  <param name="move_base/obstacle_layer/bump/clearing" value="false"/>
 
 </launch>
