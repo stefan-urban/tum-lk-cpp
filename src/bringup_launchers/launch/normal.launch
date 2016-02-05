@@ -3,6 +3,14 @@
   <include file="$(find turtlebot_bringup)/launch/minimal.launch" />
   <param name="cmd_vel_mux/yaml_cfg_file" value="$(find bringup_launchers)/param/velocity_muxer/mux.yaml"/>
 
+  <!-- Safety controller for bumpers and cliffs -->
+  <node pkg="nodelet" type="nodelet" name="kobuki_safety_controller" args="load kobuki_safety_controller/SafetyControllerNodelet mobile_base_nodelet_manager">
+    <remap from="kobuki_safety_controller/cmd_vel" to="/cmd_vel_mux/input/safety_controller"/>
+    <remap from="kobuki_safety_controller/events/bumper" to="/mobile_base/events/bumper"/>
+    <remap from="kobuki_safety_controller/events/cliff" to="/mobile_base/events/cliff"/>
+    <remap from="kobuki_safety_controller/events/wheel_drop" to="/mobile_base/events/wheel_drop"/>
+  </node>
+
   <!-- MoveBase - used for path following -->
   <arg name="odom_frame_id"   default="odom"/>
   <arg name="base_frame_id"   default="base_footprint"/>
