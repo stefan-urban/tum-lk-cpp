@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="driver" type="multiple_goals" name="driver" output="screen">
+  <node pkg="driver_old" type="multiple_goals" name="driver" output="screen">
     <param name="rotation_cmd_vel_command" value="/cmd_vel_mux/input/driver" />
     <param name="sound_command" value="/mobile_base/commands/sound" />
   </node>
