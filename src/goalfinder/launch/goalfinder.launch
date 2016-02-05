@@ -4,7 +4,7 @@
   <include file="$(find goalfinder)/launch/_amcl.launch" />
 
   <!-- get marker positions -->
-  <include file="$(find aruco_ros)/launch/_all_markers.launch" />
+  <include file="$(find goalfinder)/launch/_markers.launch" />
 
   <!-- transform marker positions to useable navigation goals -->
   <node name="goalfinder" pkg="goalfinder" type="goalfinder" output="screen">
