@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>move_base_launcher</name>
+  <name>bringup_launcher</name>
   <version>1.0.0</version>
-  <description>Central folder for files needed to start move base properly.</description>
+  <description>Central folder for files needed to start move base and other basic operations properly.</description>
 
   <maintainer email="stefan.urban@tum.de">Stefan Urban</maintainer>
   <license>GPLv3</license>

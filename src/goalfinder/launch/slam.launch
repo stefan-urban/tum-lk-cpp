@@ -1,6 +1,4 @@
 <launch>
-  <!-- mobile_base -->
-  <include file="$(find turtlebot_bringup)/launch/minimal.launch" />
 
   <!-- Setup laser scanner -->
   <include file="$(find rplidar_ros)/launch/rplidar.launch"/>

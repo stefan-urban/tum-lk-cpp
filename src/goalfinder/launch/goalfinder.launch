@@ -1,6 +1,4 @@
 <launch>
-  <!-- mobile_base -->
-  <include file="$(find turtlebot_bringup)/launch/minimal.launch" />
 
   <!-- position determination -->
   <include file="$(find goalfinder)/launch/_amcl.launch" />
