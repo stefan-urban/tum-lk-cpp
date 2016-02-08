@@ -34,11 +34,13 @@ int main(int argc, char** argv)
 
     while (ros::ok())
     {
-      // Look if there is a path available
 
-        // If yes, go to next waypoint
-
-        // If not, perform random walk
+      if(driver.pathAvailable(code_id))
+      {
+        driver.gotoMarker(code_id);
+      } else {
+        driver.performRandomWalk();
+      }
 
       driver.tick();
       //ROS_INFO_STREAM("Current state: " << driver.getStateDescription());

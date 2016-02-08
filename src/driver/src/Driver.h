@@ -45,7 +45,7 @@ public:
    */
   void tick();
 
-  void followPath(std::vector<geometry_msgs::Point> path);
+  void followPath(nav_msgs::Path path);
 
   std::string getStateDescription()
   {
@@ -57,7 +57,7 @@ private:
   /// ...
   void waypoint_callback(const pathfinder::PathConstPtr &pathmsg);
 
-  geometry_msgs::Point getTargetFromPath(const std::vector<geometry_msgs::Point> &path);
+  geometry_msgs::Point getTargetFromWaypoints(const std::vector<geometry_msgs::Point> &path);
 
   /// ...
   ros::NodeHandle node;

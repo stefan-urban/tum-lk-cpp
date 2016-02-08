@@ -4,7 +4,7 @@
   <version>1.0.0</version>
   <description>Drives the TurtleBot consecutively to locations marked by AruCo codes.</description>
 
-  <maintainer email="stefan.urban@tum.de">Stefan Urban</maintainer>
+  <maintainer email="quirin.hirmer@tum.de">Quirin Hirmer</maintainer>
 
   <license>GPLv3</license>
 

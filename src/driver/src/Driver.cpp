@@ -7,24 +7,35 @@ Driver::Driver()
 {
   turtleBot = std::make_shared<TurtleBot>();
   stateManager.setTurtleBot(turtleBot);
-  //waypoint_subscriber = node.subscribe("/path_waypoints", 1, &Driver::waypoint_callback, this);
+  waypoint_subscriber = node.subscribe("/paths", 1, &Driver::waypoint_callback, this);
 }
 
 void Driver::gotoMarker(int id)
 {
+  if(!pathAvailable(id))
+    return;
 
+  if(stateManager.currentState()->getID() == StateID::RANDOM_WALK)
+  {
+    stateManager.clear_states();
+    stopRobot();
+  }
 }
 
 bool Driver::pathAvailable(int id)
 {
-  return false;
+  return paths[id].poses.empty();
 }
 
 bool Driver::performRandomWalk()
 {
   if(!stateManager.isIdle())
   {
-    // Already performing some type of movement, stop the robot first
+    // Already performing random walk?
+    if(stateManager.currentState()->getID() == StateID::RANDOM_WALK)
+      return true;
+
+    // Already performing some other type of movement, stop the robot first
     return false;
   }
 
@@ -42,19 +53,25 @@ void Driver::tick()
   stateManager.tick();
 }
 
-void Driver::followPath(std::vector<geometry_msgs::Point> path)
+void Driver::followPath(nav_msgs::Path path)
 {
-  if(path.empty())
+  if(path.poses.empty())
     return;
   if(!stateManager.isIdle())
     return;
 
-  geometry_msgs::Point dest = getTargetFromPath(path);
+  std::vector<geometry_msgs::Point> waypoints;
+  for(int i = 0; i < path.poses.size(); i++)
+  {
+    waypoints.push_back(path.poses[i].pose.position);
+  }
+
+  geometry_msgs::Point dest = getTargetFromWaypoints(waypoints);
 
   stateManager.push_state(std::make_shared<StateMovingLocation>(turtleBot, dest));
 }
 
-geometry_msgs::Point Driver::getTargetFromPath(const std::vector<geometry_msgs::Point> &path)
+geometry_msgs::Point Driver::getTargetFromWaypoints(const std::vector<geometry_msgs::Point> &path)
 {
   float firstAngle = turtleBot->getTurnAngle(path.at(0));
   geometry_msgs::Point dest = path.front();
