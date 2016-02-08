@@ -10,10 +10,12 @@ TargetDetermination::TargetDetermination()
   markers_sub = node.subscribe(markers_topic.c_str(), 1, &TargetDetermination::markersCallback, this);
 
   // Try to get parameters
-  if (!node.getParam("goal_distance_from_marker", goal_distance_from_marker))
+  if (!node.getParam("/goalfinder/goal_distance_from_marker", goal_distance_from_marker))
   {
-    goal_distance_from_marker = 0.3;
+    goal_distance_from_marker = 0.4;
   }
+
+  ROS_INFO_STREAM("Goal distance will be " << goal_distance_from_marker << " meters.");
 }
 
 std::map<unsigned int, geometry_msgs::PoseStamped> TargetDetermination::getGoals()
