@@ -22,7 +22,7 @@ bool Driver::pathAvailable(int id)
 
 bool Driver::performRandomWalk()
 {
-  if(stateManager.currentState()->getID() != StateID::IDLE)
+  if(!stateManager.isIdle())
   {
     // Already performing some type of movement, stop the robot first
     return false;
@@ -46,7 +46,7 @@ void Driver::followPath(std::vector<geometry_msgs::Point> path)
 {
   if(path.empty())
     return;
-  if(stateManager.currentState()->getID() != StateID::IDLE)
+  if(!stateManager.isIdle())
     return;
 
   geometry_msgs::Point dest = getTargetFromPath(path);

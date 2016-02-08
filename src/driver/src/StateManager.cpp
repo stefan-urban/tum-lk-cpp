@@ -75,9 +75,7 @@ void StateManager::tick()
 {
   // make sure that the stack is not empty
   if(states.empty())
-  {
     push_state(std::make_shared<StateIdle>());
-  }
 
   states.back()->tick();
 
@@ -86,6 +84,10 @@ void StateManager::tick()
   if(states.back()->hasFinished())
   {
     states.pop_back();
+
+    if(states.empty())
+      push_state(std::make_shared<StateIdle>());
+      
     states.back()->resume();
   }
 }
@@ -104,4 +106,9 @@ std::shared_ptr<State> StateManager::currentState()
 std::string StateManager::getStateDescription()
 {
   return stateNames[states.back()->getID()] + states.back()->getDescription();
+}
+
+bool StateManager::isIdle()
+{
+  return states.back()->getID() == StateID::IDLE;
 }

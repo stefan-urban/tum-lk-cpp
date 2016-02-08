@@ -54,7 +54,15 @@ public:
    */
   std::shared_ptr<State> currentState();
 
+  /**
+   * Returns a short printable description of the currently active state.
+   */
   std::string getStateDescription();
+
+  /**
+   * Returns true if the robot is in idle mode, i.e. he is ready for new commands.
+   */
+  bool isIdle();
 
 private:
   std::vector<std::shared_ptr<State>> states;
