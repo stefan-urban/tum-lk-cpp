@@ -20,6 +20,13 @@ void Driver::gotoMarker(int id)
     stateManager.clear_states();
     stopRobot();
   }
+
+  followPath(paths[id]);
+}
+
+bool Driver::isMarkerReached(int id)
+{
+  return false;
 }
 
 bool Driver::pathAvailable(int id)

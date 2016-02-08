@@ -32,7 +32,7 @@ int main(int argc, char** argv)
   {
     ros::Rate loop_rate(30.0);
 
-    while (ros::ok())
+    while (ros::ok() && !driver.isMarkerReached(code_id))
     {
 
       if(driver.pathAvailable(code_id))
