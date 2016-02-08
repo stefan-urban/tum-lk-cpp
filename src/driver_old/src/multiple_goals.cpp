@@ -4,7 +4,6 @@
 #include <geometry_msgs/Twist.h>
 #include <nav_msgs/Path.h>
 #include <actionlib_msgs/GoalStatusArray.h>
-#include <goalfinder/Path.h>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <move_base_msgs/MoveBaseActionGoal.h>
 #include <actionlib_msgs/GoalID.h>

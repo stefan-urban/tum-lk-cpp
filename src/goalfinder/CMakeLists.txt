@@ -13,12 +13,11 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   aruco_msgs
   std_msgs
-  nav_msgs
 )
 
 # Messages files
-add_message_files( FILES Path.msg Goal.msg Goals.msg )
-generate_messages( DEPENDENCIES std_msgs nav_msgs geometry_msgs )
+add_message_files( FILES Goal.msg Goals.msg )
+generate_messages( DEPENDENCIES std_msgs geometry_msgs )
 
 # Package configuration
 catkin_package(

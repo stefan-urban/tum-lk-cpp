@@ -3,7 +3,7 @@
 #include "TurtleBot.h"
 #include "StateManager.h"
 
-#include <goalfinder/Path.h>
+#include <pathfinder/Path.h>
 
 /**
  * Class for controlling the robot's movement.
@@ -55,7 +55,7 @@ public:
 private:
 
   /// ...
-  void waypoint_callback(const goalfinder::PathConstPtr &pathmsg);
+  void waypoint_callback(const pathfinder::PathConstPtr &pathmsg);
 
   geometry_msgs::Point getTargetFromPath(const std::vector<geometry_msgs::Point> &path);
 

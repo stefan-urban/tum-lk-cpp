@@ -1,7 +1,6 @@
 #include <ros/ros.h>
 #include <geometry_msgs/PoseStamped.h>
 #include <nav_msgs/Path.h>
-#include <goalfinder/Path.h>
 #include <move_base_msgs/MoveBaseAction.h>
 #include <move_base_msgs/MoveBaseActionGoal.h>
 #include <actionlib_msgs/GoalID.h>
