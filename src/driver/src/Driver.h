@@ -22,8 +22,8 @@ public:
   void gotoMarker(int id);
 
   /**
-    * Returns true if the specified marker has been reached.
-    */
+   * Returns true if the specified marker has been reached.
+   */
   bool isMarkerReached(int id);
 
   /**
@@ -50,7 +50,7 @@ public:
    */
   void tick();
 
-  void followPath(nav_msgs::Path path);
+  void followPath(int id);
 
   std::string getStateDescription()
   {
@@ -63,6 +63,8 @@ private:
   void waypoint_callback(const pathfinder::PathConstPtr &pathmsg);
 
   geometry_msgs::Point getTargetFromWaypoints(const std::vector<geometry_msgs::Point> &path);
+
+  float getDistanceToLastPosition(int id);
 
   /// ...
   ros::NodeHandle node;
@@ -82,6 +84,8 @@ private:
    * Interface to the robot's current position and for movement orders.
    */
   std::shared_ptr<TurtleBot> turtleBot;
+
+  int currentID = -1;
 
   const int PATH_INTERP_MAX_WAYPOINTS = 10;
   const float PATH_INTERP_MAX_ERROR = 1.0f;
