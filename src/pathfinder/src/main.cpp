@@ -10,7 +10,7 @@
 #include "Planner.h"
 
 
-std::vector<goalfinder::Goal> goals;
+std::vector<goalfinder::Goal> goals(8);
 
 void goalsCallback(const goalfinder::GoalsConstPtr& goals_msg)
 {
@@ -31,6 +31,8 @@ geometry_msgs::PoseStamped current_pose;
 
 void positionCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr& pose)
 {
+  ROS_INFO_STREAM("Did receive current pose");
+
   current_pose.header = pose->header;
   current_pose.pose = pose->pose.pose;
 }
@@ -44,8 +46,9 @@ int main(int argc, char** argv)
   // Start ROS
   ros::start();
 
-  // Periodically update own position
+  // Periodically update own and goals' positions
   ros::Subscriber pose_subscriber = node.subscribe("/amcl_pose", 1, &positionCallback);
+  ros::Subscriber goal_subscriber = node.subscribe("/goals", 1, &goalsCallback);
 
   // Wait for first position update
   while (ros::ok() && current_pose.header.stamp.sec == 0)
@@ -65,16 +68,21 @@ int main(int argc, char** argv)
   ROS_INFO("Startup finished!");
 
   // Loop
-  ros::Rate loop_rate(1.0);
+  ros::Rate loop_rate(0.5);
 
   while (ros::ok())
   {
-
     // Paths
     for (const auto& goal : goals)
     {
       // Calc path
       nav_msgs::Path path = p.makePlan(current_pose, goal.pose);
+
+      // Not working, why ever
+      if (path.poses.size() == 0)
+      {
+        continue;
+      }
 
       // Publish path
       pathfinder::Path msg;
@@ -83,6 +91,8 @@ int main(int argc, char** argv)
       msg.path = path;
 
       path_pub.publish(msg);
+
+      ROS_INFO_STREAM("Published plan for goal #" << goal.destination_id);
     }
 
     ros::spinOnce();
