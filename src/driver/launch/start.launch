@@ -1,0 +1,7 @@
+<launch>
+  <!-- Generate paths from goals -->
+  <node name="pathfinder" pkg="pathfinder" type="pathfinder_node" />
+
+  <!-- Start driving to the goals -->
+  <node name="driver" pkg="driver" type="driver" />
+</launch>
