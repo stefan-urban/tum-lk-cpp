@@ -18,19 +18,10 @@ int main(int argc, char** argv)
 
   int aruco_id = 0;
 
-  /*while(ros::ok())
-  {
-
-    driver.tick();
-
-    ros::spinOnce();
-    loop_rate.sleep();
-  }*/
   // Go from AruCo code #0 to #7
-
   for (int code_id = 0; code_id <= 7; code_id++)
   {
-    ros::Rate loop_rate(30.0);
+    ros::Rate loop_rate(10.0);
 
     while (ros::ok() && !driver.isMarkerReached(code_id))
     {
@@ -43,7 +34,7 @@ int main(int argc, char** argv)
       }
 
       driver.tick();
-      //ROS_INFO_STREAM("Current state: " << driver.getStateDescription());
+      ROS_INFO_STREAM("Current state: " << driver.getStateDescription());
     }
   }
 

@@ -38,7 +38,16 @@ float TurtleBot::getTurnAngle(geometry_msgs::Point targetLocation)
   float targetAngle = atan2(current_position.x - targetLocation.x,
                             current_position.y - targetLocation.y);
 
-  return targetAngle - current_rotation;
+  // turnAngle is relative to our rotation
+  targetAngle -= current_rotation;
+
+  // clamp the value (can be negative!)
+  if(targetAngle > 2*M_PI)
+    targetAngle -= 2*M_PI;
+  if(targetAngle < -2*M_PI)
+    targetAngle += 2*M_PI;
+
+  return targetAngle;
 }
 
 geometry_msgs::Point TurtleBot::getPosition()
@@ -53,19 +62,30 @@ float TurtleBot::getRotation()
 
 void TurtleBot::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
 {
-  tf::Transform transform;
+  //tf::Transform transform;
 
-  tf::Quaternion quad;
-  tf::quaternionMsgToTF(odom->pose.pose.orientation, quad);
+  //tf::Quaternion quad;
+  //tf::quaternionMsgToTF(odom->pose.pose.orientation, quad);
 
   // Robot is center of universe
-  transform.setOrigin(tf::Vector3(odom->pose.pose.position.x, odom->pose.pose.position.y, 0.0));
-  transform.setRotation(quad);
+  //transform.setOrigin(tf::Vector3(odom->pose.pose.position.x, odom->pose.pose.position.y, 0.0));
+  //transform.setRotation(quad);
 
-  tf_broadcaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "turtlebot_base"));
+  //tf_broadcaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "turtlebot_base"));
 
   current_position = odom->pose.pose.position;
-  current_rotation = tf::getYaw(odom->pose.pose.orientation);
+
+  float new_angle = tf::getYaw(odom->pose.pose.orientation);
+  if (new_angle < current_rotation)
+  {
+    new_angle += 2 * M_PI;
+  }
+
+  current_rotation = new_angle;
+}
+ros::NodeHandle *TurtleBot::getNode()
+{
+  return &node;
 }
 
 /*

@@ -19,12 +19,26 @@ StateRotating::StateRotating(std::shared_ptr<TurtleBot> turtleBot, geometry_msgs
 void StateRotating::tick()
 {
 	float currentAngle = getTurtleBot()->getRotation();
-	if(currentAngle >= turnAngle - startAngle)
+
+  // clamp the target angle to [0, 2pi]
+  float targetAngle = turnAngle + startAngle;
+  if(targetAngle < 0)
+    targetAngle += 2*M_PI;
+  if(targetAngle > 2*M_PI)
+    targetAngle -= 2*M_PI;
+
+  // is the rotation done?
+	if(std::abs(currentAngle - targetAngle) <= 0.1f)
 	{
 		getTurtleBot()->stop();
 		setFinished(true);
 	} else {
-		getTurtleBot()->move(0, 0.5);
+
+    // turn into the direction that is faster to get to the target angle
+    if(targetAngle > startAngle)
+		  getTurtleBot()->move(0, 0.2);
+    else
+      getTurtleBot()->move(0, -0.2);
 	}
 }
 

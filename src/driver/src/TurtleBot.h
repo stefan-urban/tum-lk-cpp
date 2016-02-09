@@ -62,6 +62,8 @@ public:
    */
   float getTurnAngle(geometry_msgs::Point targetLocation);
 
+  ros::NodeHandle *getNode();
+
 private:
   // ...
   ros::NodeHandle node;

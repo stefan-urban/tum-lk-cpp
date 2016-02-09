@@ -49,7 +49,7 @@ float Driver::getDistanceToLastPosition(int id)
 
 bool Driver::pathAvailable(int id)
 {
-  return paths[id].poses.empty();
+  return !paths[id].poses.empty();
 }
 
 bool Driver::performRandomWalk()
@@ -64,7 +64,7 @@ bool Driver::performRandomWalk()
     return false;
   }
 
-  stateManager.push_state(std::make_shared<StateRandomWalk>());
+  stateManager.push_state(std::make_shared<StateRandomWalk>(turtleBot));
   return true;
 }
 
@@ -104,9 +104,7 @@ void Driver::followPath(int id)
   // if not determine the next location
   std::vector<geometry_msgs::Point> waypoints;
   for(int i = 0; i < path.poses.size(); i++)
-  {
     waypoints.push_back(path.poses[i].pose.position);
-  }
 
   geometry_msgs::Point dest = getTargetFromWaypoints(waypoints);
 
@@ -139,11 +137,13 @@ void Driver::waypoint_callback(const pathfinder::PathConstPtr &pathmsg)
   if(id > 7)
     return;
 
-  // @todo: determine better way to check for a updated path
   if(paths[id].header.seq > pathmsg->path.header.seq)
   {
+    // new path available for our current target, stop the robot so we don't drive
+    // to an outdated location
     if(id == currentID)
       stopRobot();
+
     paths[id] = pathmsg->path;
   }
 }
