@@ -2,6 +2,9 @@
 
 #include "State.h"
 
+/**
+ * Does nothing.
+ */
 class StateIdle : public State
 {
 public:

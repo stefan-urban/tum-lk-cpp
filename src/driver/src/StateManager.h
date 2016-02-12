@@ -8,9 +8,10 @@
 /**
  * A very simple "FSM" for use with the TurtleBot. This is not a general purpose
  * implementation of an FSM but rather a stack of states.
- * The transition between states are handled manually
- * by the class Driver.
+ * The transition between states are handled manually by the class Driver.
  * When no other state is active, TurtleBotState::IDLE will be executed.
+ * To perform a series of actions, push all the states necessary in reverse
+ * order.
  */
 class StateManager
 {
@@ -18,6 +19,9 @@ public:
   StateManager();
   ~StateManager();
 
+  /**
+   * Initializes the internal reference to the turtlebot.
+   */
   void setTurtleBot(std::shared_ptr<TurtleBot> bot);
 
   /**
@@ -65,6 +69,9 @@ public:
   bool isIdle();
 
 private:
+  /**
+   * The "stack" of states that are currently queued
+   */
   std::vector<std::shared_ptr<State>> states;
 
   std::shared_ptr<TurtleBot> turtleBot;

@@ -6,7 +6,6 @@
 #include <geometry_msgs/Point.h>
 #include <nav_msgs/Odometry.h>
 #include <tf/transform_broadcaster.h>
-//#include <turtlebot_node/TurtlebotSensorState.h>
 #include <string>
 
 
@@ -23,11 +22,6 @@ public:
    * Advertises the movement command and provide tf
    */
   TurtleBot();
-
-  /**
-   * Move to a point in free space
-   */
-  void move(geometry_msgs::Point destination);
 
   /**
    * Move according to Twist
@@ -53,25 +47,37 @@ public:
    */
   geometry_msgs::Point getPosition();
 
+  /**
+   * Returns the current angle of rotation of the robot.
+   */
   float getRotation();
 
 
   /**
-   + Returns the angle the turtle bot has to turn in order to face the target
+   * Returns the angle the turtle bot has to turn in order to face the target
    * location.
    */
   float getTurnAngle(geometry_msgs::Point targetLocation);
 
+  /**
+   * Returns the node handle of the robot for use with the states.
+   */
   ros::NodeHandle *getNode();
 
 private:
-  // ...
+  /**
+   * Handle to the node
+   */
   ros::NodeHandle node;
 
-  // ...
+  /**
+   * Message publisher for velocity messages
+   */
   ros::Publisher velcmd_publisher;
 
-  // ...
+  /**
+   * Subscriber for odometry messages
+   */
   ros::Subscriber pose_subscriber;
 
   /**
@@ -100,10 +106,9 @@ private:
   geometry_msgs::Point current_position;
 
   /**
-   *
+   * The current angle of rotation of the robot.
    */
   float current_rotation = 0.f;
 
-  // ...
-  tf::TransformBroadcaster tf_broadcaster;
+  //tf::TransformBroadcaster tf_broadcaster;
 };

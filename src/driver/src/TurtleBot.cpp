@@ -8,11 +8,6 @@ TurtleBot::TurtleBot()
   //bumper_subscriber = node.subscribe<turtlebot_node::TurtlebotSensorState>("/turtlebot_node/sensor_state", 1000, &TurtleBot::bumperCallback, this);
 }
 
-void TurtleBot::move(geometry_msgs::Point destination)
-{
-
-}
-
 void TurtleBot::move(geometry_msgs::Twist twist)
 {
   velcmd_publisher.publish(twist);
@@ -62,16 +57,6 @@ float TurtleBot::getRotation()
 
 void TurtleBot::poseCallback(const nav_msgs::Odometry::ConstPtr& odom)
 {
-  //tf::Transform transform;
-
-  //tf::Quaternion quad;
-  //tf::quaternionMsgToTF(odom->pose.pose.orientation, quad);
-
-  // Robot is center of universe
-  //transform.setOrigin(tf::Vector3(odom->pose.pose.position.x, odom->pose.pose.position.y, 0.0));
-  //transform.setRotation(quad);
-
-  //tf_broadcaster.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "world", "turtlebot_base"));
 
   current_position = odom->pose.pose.position;
 

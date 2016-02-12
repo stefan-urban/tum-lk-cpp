@@ -19,21 +19,24 @@ int main(int argc, char** argv)
   int aruco_id = 0;
 
   // Go from AruCo code #0 to #7
-  for (int code_id = 0; code_id <= 7; code_id++)
+  for (int arucoID = 0; arucoID <= 7; arucoID++)
   {
     ros::Rate loop_rate(10.0);
 
-    while (ros::ok() && !driver.isMarkerReached(code_id))
+    while (ros::ok() && !driver.isMarkerReached(arucoID))
     {
-
-      if(driver.pathAvailable(code_id))
+      // if the path to arucoID is not available, perform random walk (ie drive
+      // around while avoiding obstacles)
+      if(driver.pathAvailable(arucoID))
       {
-        driver.gotoMarker(code_id);
+        driver.gotoMarker(arucoID);
       } else {
         driver.performRandomWalk();
       }
 
       driver.tick();
+
+      ros::spinOnce();
       ROS_INFO_STREAM("Current state: " << driver.getStateDescription());
     }
   }

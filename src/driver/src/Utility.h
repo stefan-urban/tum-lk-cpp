@@ -9,7 +9,9 @@ std::unique_ptr<T> make_unique( Args&& ...args )
 {
     return std::unique_ptr<T>( new T( std::forward<Args>(args)... ) );
 }
-
+/**
+ * Returns the sign of the given value.
+ */
 int sgn(int x)
 {
   return (x > 0) - (x < 0);

@@ -3,6 +3,11 @@
 #include "State.h"
 #include "sensor_msgs/LaserScan.h"
 
+/**
+ * Performs random walk (driving around while avoiding obstacles) on the
+ * TurtleBot.
+ * Note: this state will never finish.
+ */
 class StateRandomWalk : public State
 {
 public:

@@ -2,6 +2,10 @@
 
 #include "State.h"
 
+/**
+ * Rotates the TurtleBot by the given angle or into the direction of the given
+ * location.
+ */
 class StateRotating : public State
 {
 public:

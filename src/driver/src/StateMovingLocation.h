@@ -2,6 +2,9 @@
 
 #include "State.h"
 
+/**
+ * Moves the TurtleBot to the given location.
+ */
 class StateMovingLocation : public State
 {
 public:
