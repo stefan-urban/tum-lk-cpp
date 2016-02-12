@@ -13,12 +13,11 @@ For the recognition of the markers, a pre-existting ROS [wrapper](https://github
 The package responsible for this function can be found in the folder ```goalfinder```. The main output is the ```/goals``` topic that contains all possible movement targets.
 
 **Driver** <br>
-After determining the next movement goal, the driver code will take care of maneuvering the robot towards it. This is done by using both the [```move_base```](http://wiki.ros.org/move_base) package and the [```actionlib```](http://wiki.ros.org/actionlib) package provided by the default ROS installation. <br>
-The self localization needed by these algorithms is handled completely by the [```turtlebot_navigation```](http://wiki.ros.org/turtlebot_navigation) package. It's included AMCL node will try to determine the exact current location of the robot in a prerecorded map of the room. (In the *Usage* chapter of this readme, you can learn how this map file was created.) <br>
-a ```move_base```  integrates the *costmap* functionality. Based on the map provided by the AMCL stack, it will link a cost parameter to each location in it. It will be higher, the closer the point is to an obstacle. For dynamic obstacles not represented on the static AMCL map, the laser scanner is used. It will constantly update the costmap with the detected obstacles information. <br>
-With the current position and the costmap, the *global planner* of ```move_base``` can calculate the best path to a target location. This 	trajectory will be followed as well as possible by a *local planner* that defines the commands sent to the robots motors. (```mobile_base```) <br>
+After determining the next movement goal, the driver code will take care of maneuvering the robot towards it. This is done by using both the [move_base](http://wiki.ros.org/move_base) package and the [actionlib](http://wiki.ros.org/actionlib) package provided by the default ROS installation.  
+The self localization needed by these algorithms is handled completely by the [turtlebot_navigation](http://wiki.ros.org/turtlebot_navigation) package. It's included AMCL node will try to determine the exact current location of the robot in a prerecorded map of the room. (In the *Usage* chapter of this readme, you can learn how this map file was created.)  
+```move_base```  integrates the *costmap* functionality. Based on the map provided by the AMCL stack, it will link a cost parameter to each location in it. It will be higher, the closer the point is to an obstacle. For dynamic obstacles not represented on the static AMCL map, the laser scanner is used. It will constantly update the costmap with the detected obstacles information.  
+With the current position and the costmap, the *global planner* of ```move_base``` can calculate the best path to a target location. This 	trajectory will be followed as well as possible by a *local planner* that defines the commands sent to the robots motors. (```mobile_base```)  
 Since we did not use any calibration whatsoever on the RGB camera, the position of the marker will change constantly while driving towards it. Therefore our system will reevaluate the robot's target position periodically (2s) and send it to move base.
-
 
 ## Packages
 
