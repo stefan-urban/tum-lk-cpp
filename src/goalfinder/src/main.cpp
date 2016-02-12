@@ -50,9 +50,10 @@ int main(int argc, char** argv)
 
   while (ros::ok())
   {
-    // Goals
+    // Obtain the most recent positions of all goals
     auto goals = td.getGoals();
 
+    // Pack up goals message
     goalfinder::Goals goals_msg;
 
     for (const auto& goal : goals)
@@ -72,8 +73,6 @@ int main(int argc, char** argv)
 
     ros::spinOnce();
     loop_rate.sleep();
-
-
   }
 
   // Good bye turtlebot

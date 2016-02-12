@@ -21,21 +21,8 @@ void markersCallback(const aruco_msgs::MarkerArrayConstPtr& marker_array)
     geometry_msgs::PoseStamped pose;
     pose.pose = marker.pose.pose;
 
-    // @todo: there has to be a function that does this in one line!
-
-    // Find if already in storage
-    std::map<unsigned int, geometry_msgs::PoseStamped>::iterator it = markers_.find(marker.id);
-
-    if( it != markers_.end() )
-    {
-      // Found, replace
-      markers_[marker.id] = pose;
-    }
-    else
-    {
-      // Not found, insert
-      markers_.insert(std::pair<unsigned int, geometry_msgs::PoseStamped>(marker.id, pose));
-    }
+    // And save
+    markers_[marker.id] = pose;
   }
 }
 

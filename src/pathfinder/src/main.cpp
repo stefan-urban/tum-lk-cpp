@@ -10,6 +10,7 @@
 #include "Planner.h"
 
 
+// Goals
 std::vector<goalfinder::Goal> goals(8);
 
 void goalsCallback(const goalfinder::GoalsConstPtr& goals_msg)
@@ -27,6 +28,8 @@ void goalsCallback(const goalfinder::GoalsConstPtr& goals_msg)
   }
 }
 
+
+// Poses
 geometry_msgs::PoseStamped current_pose;
 
 void positionCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr& pose)
@@ -36,6 +39,8 @@ void positionCallback(const geometry_msgs::PoseWithCovarianceStampedConstPtr& po
   current_pose.header = pose->header;
   current_pose.pose = pose->pose.pose;
 }
+
+
 
 int main(int argc, char** argv)
 {

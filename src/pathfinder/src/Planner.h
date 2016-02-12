@@ -6,7 +6,8 @@
 
 /**
  * Connects to move_base and is able to obtain a path from the current position
- * to a given goal
+ * to a given goal. Due to many reasons move_base would not create a path, try
+ * to brute force one out of it.
  */
 class Planner
 {

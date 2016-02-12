@@ -1,47 +1,28 @@
 TurtleBot Aruco Marker Driver
 =============================
 
-## Available nodes
+This project was created as a part of the course "Leistungskurs C++" at the TUM in 2016. The main task was to make a TurtleBot ([Kobuki](http://kobuki.yujinrobot.com/)) recognize and move to different Aruco markers.
 
-A list of all available nodes:
+## Concept
+
+**Overview** <br>
+The robot features a Kinect-like sensor with an integrated RGB camera, that is used to detect markers in an small area in front of it. After the first marker/goal is detected, the robot moves towards it, while avoiding obstacles. Consecutively it will find and move to eight different positions.
+
+**Aruco code detection and goal determination** <br>
+For the recognition of the markers, a pre-existting ROS [wrapper](https://github.com/pal-robotics/aruco_ros) for Aruco detection was used. Our job focused on extracting the marker positions and determine a goal in front of it. This is necessary because the robot must not drive directly to the position of the marker because it would hit the obstacle it is mounted on. <br>
+The package responsible for this function can be found in the folder ```goalfinder```. The main output is the ```/goals``` topic that contains all possible movement targets.
+
+**Driver** <br>
+After determining the next movement goal, the driver code will take care of maneuvering the robot towards it. This is done by using both the [```move_base```](http://wiki.ros.org/move_base) package and the [```actionlib```](http://wiki.ros.org/actionlib) package provided by the default ROS installation. <br>
+The self localization needed by these algorithms is handled completely by the [```turtlebot_navigation```](http://wiki.ros.org/turtlebot_navigation) package. It's included AMCL node will try to determine the exact current location of the robot in a prerecorded map of the room. (In the *Usage* chapter of this readme, you can learn how this map file was created.) <br>
+a ```move_base```  integrates the *costmap* functionality. Based on the map provided by the AMCL stack, it will link a cost parameter to each location in it. It will be higher, the closer the point is to an obstacle. For dynamic obstacles not represented on the static AMCL map, the laser scanner is used. It will constantly update the costmap with the detected obstacles information. <br>
+With the current position and the costmap, the *global planner* of ```move_base``` can calculate the best path to a target location. This 	trajectory will be followed as well as possible by a *local planner* that defines the commands sent to the robots motors. (```mobile_base```) <br>
+Since we did not use any calibration whatsoever on the RGB camera, the position of the marker will change constantly while driving towards it. Therefore our system will reevaluate the robot's target position periodically (2s) and send it to move base.
 
 
-> ### **goalfinder**
+## Packages
 
->
-> Starts camera and aruco marker detection. Provides the position of all found markers and the generated goals.
->
-> ##### Parameter:
-> - ```goal_distance_from_marker``` (in meters) <br>  
->   The robot is not moving directly to the position of the marker but before it. ...
->
-> ##### Launch files:
-> - ```slam.launch``` <br>  
->   Starts up Kobuki mobile_base, laser scanner and the gmapping tools. It will try to create a precise map of the room with the available distance information. Tip: Move robot around with teleoperation programs.
->
-> - ```rviz_slam.launch``` <br>  
->   Launches a predefined setting for RVIZ suitable for monitoring the SLAM progress.
->
-> - ```goalfinder``` <br>  
->   After the map of the room is available, the goalfinder will start up AMCL, the camera and the Aruco code detection. Poses in front of the markers that directly face it will be published.
->
-> - ```rviz_goals.launch``` <br>  
->   Launches a predefined setting for RVIZ suitable for examination of the goals' position.
->
-> -----------------------------
-> ### **driver**
->
-> description
->
-> ##### Parameters:
->
-> ...
->
-> ##### Launch files:
->
-> ...
->
-
+A list of all packages can be viewed [here](doc/packages.md).
 
 
 ## Usage
@@ -71,6 +52,8 @@ roslaunch bringup_launchers normal.launch
 
 ### 2. SLAM (map generation)
 
+You can skip this point of you already created a map.
+
 ```
 # On robot:
 roslaunch goalfinder slam.launch
@@ -87,11 +70,9 @@ rosrun map_server map_saver -f mymap
 
 Before continuing, stop all running nodes.
 
-### 3. Make AMCL use the new generated map
-
 Change the path to the map in ```goalfinder/launch/_amcl.launch```. The parameter is called: ```map_file```.
 
-### 4. Find markers and determine goal poses
+### 3. Start AMCL with goalfinder
 
 All found markers will be saved by [stamped pose](http://docs.ros.org/api/geometry_msgs/html/msg/PoseStamped.html), even if they are not longer visible to the camera.
 
@@ -103,15 +84,17 @@ roslaunch goalfinder goalfinder.launch
 roslaunch goalfinder rviz_goals.launch
 ```
 
-### 5. Set initial position
+### 4. Set initial position
 
 The topic ```/initialpose``` helps AMCL to determine the current position of the robot at startup. This can be set manually or with the **2D Pose Estimate** function of RVIZ (preferred).
 
-### 6. Start driving
+You can skip this step if you want, but be aware, the robot needs to drive a few meters to determine its exact location.
+
+### 5. Start driving
 
 ```
 # On robot:
-roslaunch driver xyz.launch
+roslaunch driver_old start.launch
 ```
 
 ##### Notes
@@ -119,13 +102,10 @@ roslaunch driver xyz.launch
 - The robot will beep when reaching the final position in front of a marker.
 - Simple obstacles can be avoided. They have to be detectable by the laser scanner, meaning not too narrow or small.
 
-## Todo
+## What did not work
 
-- Marker in rviz mit textur darstellen, damit TF debug entfernt werden kann
-- Path.msg entfernen
-- Recovery Behaviour
-- CLI should use services if possible > response!
-- try to disable as much as possible from camera setup (like depth, if we do not use it!)
+- Using a velocity smoother: ```move_base``` was unable to stop at the target location in time, it basically drove beyond it at every try. Unfortunately this could not be fixed in time. But startup launch file is available in ```src/bringup_launchers/launch/smooth.launch```.
+- State machine approach, due to lack of time. Including random walk functionality.
 
 ## References
 

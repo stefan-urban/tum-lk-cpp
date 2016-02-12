@@ -7,6 +7,7 @@
 
 TargetDetermination::TargetDetermination()
 {
+  // Subscribe to aruco_ros topic
   markers_sub = node.subscribe(markers_topic.c_str(), 1, &TargetDetermination::markersCallback, this);
 
   // Try to get parameters
