@@ -35,6 +35,10 @@ export ROS_WORKSPACE=/home/username/repo
 
 export ROS_MASTER_URI=http://herz-dame.clients.eikon.tum.de:11311
 export ROS_HOSTNAME=`hostname`.clients.eikon.tum.de
+
+# Only on robot:
+export TURTLEBOT_SERIAL_PORT=/dev/ttyUSB0
+export RPLIDAR_SERIAL_PORT=/dev/ttyUSB1
 ```
 
 
