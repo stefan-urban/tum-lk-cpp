@@ -1,0 +1,155 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+
+\usepackage{pbox}
+
+% Syntax highlighting for code
+\usepackage{listings}
+
+% Language
+\usepackage[english]{babel}
+
+% Borders
+\usepackage[margin=3.0cm]{geometry}
+
+% Modern style
+%\usepackage{lmodern}
+%\renewcommand*\familydefault{\sfdefault}
+
+% Use TikZ
+\usepackage{tikz}
+\usetikzlibrary{positioning,decorations.pathreplacing,shapes}
+
+\usepackage[
+	bookmarks=true,
+	bookmarksnumbered=true,
+	pdfauthor={Stefan Urban},
+	pdftitle={Besprechung LK C++},
+	colorlinks=false,
+	pdfborder={0 0 0},
+	linktoc=all
+]{hyperref}
+
+% For references
+%\usepackage[
+%	bookmarks,
+%	bookmarksopen=true,
+%	bookmarksnumbered=true,
+%	pdftitle={Bachelorarbeit: Antennenrotor-Steuerung},
+%	colorlinks=false,
+%	plainpages=false,% zur korrekten Erstellung der Bookmarks
+%	pdfpagelabels,% zur korrekten Erstellung der Bookmarks
+%	hypertexnames=false,% zur korrekten Erstellung der Bookmarks
+%	linktoc=all
+%]{hyperref}
+
+\usepackage{cleveref}
+
+% For correct figure placement
+\usepackage{float}
+
+% Includeing pdfs
+\usepackage{pdfpages}
+
+% Unnumbered figure captions
+\usepackage[center]{caption}
+
+% Correct spacing
+\usepackage[onehalfspacing]{setspace}
+
+% Table cell padding
+\def\arraystretch{1.5}
+
+% Stick footnotes to the bottom of the page
+\usepackage[bottom]{footmisc}
+
+% Correct appendix handling
+\usepackage[titletoc]{appendix}
+\addto\captionsngerman{\let\appendixtocname\appendixname%
+\let\appendixpagename\appendixname}
+
+% Correct units in text
+\usepackage{siunitx}
+\sisetup{
+  locale = DE ,
+  per-mode = symbol
+}
+
+% Floating figures
+\usepackage{wrapfig}
+
+% Header font sizes
+\usepackage{sectsty}
+\sectionfont{\fontsize{18}{15}\selectfont}
+\subsectionfont{\fontsize{13}{15}\selectfont}
+\subsubsectionfont{\fontsize{13}{15}\selectfont}
+
+
+% Distance between paragraphs
+\addtolength{\parskip}{2mm}
+
+% Paragraph indents
+\setlength{\parindent}{0pt}
+
+% ToC level
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+% ---------------------------------------------------------------
+
+% Title Page
+\title{Besprechung LK C++}
+\author{Stefan Urban}
+
+
+\begin{document}
+
+
+\textbf{Concept}
+
+\begin{itemize}
+	\item Goal determination:\vspace*{-0.3cm}
+		\begin{itemize}
+			\itemsep0em
+			\item Self-localization with SLAM and AMCL, ready-to-use packages that provide map
+			\item Aruco-marker detection with RGB camera of kinect-like sensor bar (ready-to-use library)
+			\item Goals are positioned in a certain distance before the marker. Those are the actual movement targets.
+		\end{itemize}
+	\item Robot movement:\vspace*{-0.3cm}
+		\begin{itemize}
+			\itemsep0em
+			\item Receive goals as poses in map.
+			\item Hand over goal for the next marker to move base and update it constantly.
+			\item If target is currently not available, perform random/search walk.
+			\item If target is reached, beep and go on the next one.
+		\end{itemize}
+\end{itemize}
+
+\textbf{Actual work:}
+
+\begin{itemize}
+	\item Familiarize with the robot
+	\item Setup launch files, parameters, ...
+	\item Record proper map that works flawlessly with AMCL
+	\item Use TF to generate proper target pose for each marker
+	\item Setup move base
+\end{itemize}
+
+\textbf{Characteristic features:}
+
+\begin{itemize}
+	\item Dynamic behavior:\\
+			We do no have calibration whatsoever! The marker's positions are only rough estimates if the camera detects them from a distance. Especially if the markers are not in the center of the camera's fov. The position get's more accurate the closer we get to the marker.
+\end{itemize}
+
+\textbf{Planned / Unfinished work:}
+
+\begin{itemize}
+	\item Own driver module, not using move base
+	\item Own path planning
+\end{itemize}
+
+\end{document}          
